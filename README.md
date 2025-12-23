@@ -27,21 +27,23 @@ The final dataset is **fully compatible with Bibliometrix/Biblioshiny, VOSviewer
 
 ## Project structure
 
+```text
 bibliometric_review/
-├── main.py # Single execution entry point
-├── loaders.py # Data loading and source-level merging
-├── deduplication.py # DOI and fuzzy duplicate detection
-├── normalization.py # Metadata normalization
-├── scimago_utils.py # Journal title normalization (SCImago)
-├── reporting.py # Reports, Excel tables, and figures
-├── ui_messages.py # Informative user messages
-├── file_validation.py # Input validation and early exit
+├── main.py                # Single execution entry point
+├── loaders.py             # Data loading and source-level merging
+├── deduplication.py       # DOI and fuzzy duplicate detection
+├── normalization.py       # Metadata normalization
+├── scimago_utils.py       # Journal title normalization (SCImago)
+├── reporting.py           # Reports, Excel tables, and figures
+├── ui_messages.py         # Informative user messages
+├── file_validation.py     # Input validation and early exit
 ├── FILES/
-│ ├── SCOPUS/ # Scopus CSV exports
-│ ├── WOS/ # Web of Science XLS/XLSX exports
-│ └── SCIMAGO/
-│ └── scimago_unificado.csv
-└── RESULTS/ # Automatically generated outputs
+│   ├── SCOPUS/            # Scopus CSV exports
+│   ├── WOS/               # Web of Science XLS/XLSX exports
+│   └── SCIMAGO/
+│       └── scimago_unificado.csv
+└── RESULTS/               # Automatically generated outputs
+```
 
 
 ---
