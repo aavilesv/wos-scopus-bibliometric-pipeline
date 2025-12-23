@@ -52,14 +52,15 @@ bibliometric_review/
 
 Before running the pipeline, place the exported bibliographic files in the following folders:
 
+```text
 FILES/
 ├── SCOPUS/
-│ └── *.csv # Scopus exports (CSV format)
+│   └── *.csv              # Scopus exports (CSV format)
 ├── WOS/
-│ └── *.xls / *.xlsx # Web of Science exports
+│   └── *.xls / *.xlsx     # Web of Science exports
 └── SCIMAGO/
-└── scimago_unificado.csv
-
+    └── scimago_unificado.csv
+```
 
 ### Important notes
 
