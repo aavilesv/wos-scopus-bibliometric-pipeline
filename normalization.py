@@ -14,6 +14,8 @@ from ui_messages import warn
 
 def normalize_wos_to_scopus_schema(wos_df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     # 1) wos_non_repeated: filtra los In_Both == 0
+        # En WoS, todos los registros que quedan son exclusivos (0)
+
     if "In_Both" in wos_df.columns:
         wos_non_repeated = wos_df[wos_df["In_Both"] == 0].copy()
     else:

@@ -10,7 +10,7 @@ from ui_messages import info, error
 
 from loaders import load_merge_scopus, load_merge_wos
 from deduplication import cross_deduplicate
-
+import time
 # IMPORTANTE:
 # normalize_wos_to_scopus_schema debe devolver (wos_non_repeated, wos_norm)
 from normalization import normalize_wos_to_scopus_schema, apply_post_merge_normalization
@@ -24,6 +24,7 @@ from reporting import (
     plot_distribution,
     plot_raw_trends
 )
+from sjr_analysis import enrich_with_scimago
 
 # ============================================================
 # CONFIG
@@ -34,6 +35,12 @@ FUZZY_THRESHOLD = 85
 
 
 def main() -> None:
+    start_time = time.time()
+    print("=" * 60)
+    print("📊 Bibliometric Review Pipeline")
+    print("▶ Execution started...")
+    print("=" * 60)
+    
     # 1) rutas + validación (early exit)
     paths = build_default_paths()
     inv = scan_inputs(paths)
@@ -105,12 +112,19 @@ def main() -> None:
         year_start=YEAR_START,
         year_end=YEAR_FINAL,
     )
-
-    # 10) Guardar outputs principales
+# --------------------------------------------------------
+# 10) Enriquecimiento SCImago (queda en el CSV final)
+# --------------------------------------------------------
+    combined_df = enrich_with_scimago(
+        combined_df=combined_df,
+        scimago_df=scimago_df,
+        fuzzy_threshold=90
+    )
+    # 11) Guardar outputs principales
     save_outputs(combined_df, duplicated_titles, paths.results_dir)
 
     # ============================================================
-    # 11) Reporte Excel + gráficos (mostrar + guardar)
+    # 12) Reporte Excel + gráficos (mostrar + guardar)
     #     (esto reemplaza tus prints por tablas en Excel)
     # ============================================================
     report_tables = build_report_tables(
@@ -127,7 +141,7 @@ def main() -> None:
     )
     save_report_excel(report_tables, paths.results_dir)
 
-    # 12) Gráfico distribución (Kept/Removed) con tu lógica REAL:
+    # 13) Gráfico distribución (Kept/Removed) con tu lógica REAL:
     # removed_wos = original_wos - len(wos_non_repeated)
     # removed_scopus = original_scopus - len(scopus_df)  (dedup interno)
     final_scopus = len(scopus_df) if not scopus_df.empty else 0
@@ -146,14 +160,23 @@ def main() -> None:
         show=True
     )
 
-    # 13) RAW trends (antes de dedup) mostrar + guardar
+    # 14) RAW trends (antes de dedup) mostrar + guardar
     plot_raw_trends(
         raw_counts_by_year=report_tables.get("raw_counts_by_year", pd.DataFrame()),
         raw_citations_by_year=report_tables.get("raw_citations_by_year", pd.DataFrame()),
         results_dir=paths.results_dir,
         show=True
     )
+    end_time = time.time()
+    elapsed = end_time - start_time
 
+    minutes = int(elapsed // 60)
+    seconds = elapsed % 60
+
+    print("=" * 60)
+    print("✅ Pipeline completed successfully")
+    print(f"⏱ Total execution time: {minutes} min {seconds:.2f} sec")
+    print("=" * 60)
     info(
         "Proceso completado",
         "El pipeline finalizó correctamente.\n\n"
