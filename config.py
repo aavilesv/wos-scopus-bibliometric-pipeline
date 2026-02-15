@@ -23,7 +23,7 @@ RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 # Parámetros de Análisis (Analysis Parameters)
 # Rango de años a filtrar (inclusive)
-YEAR_START = 2015
+YEAR_START = 2023
 YEAR_FINAL = 2025
 
 # Umbral de similitud para deduplicación (85%)

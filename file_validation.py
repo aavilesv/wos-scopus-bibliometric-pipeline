@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List
+from typing import List, Union
 
 from ui_messages import info, warn, error
 
@@ -20,7 +20,7 @@ class InputInventory:
     wos_files: List[Path]
     scimago_exists: bool
 
-def build_default_paths(base_dir: Path | None = None) -> PipelinePaths:
+def build_default_paths(base_dir: Union[Path, None] = None) -> PipelinePaths:
     base = base_dir or Path.cwd()
     files_dir = base / "FILES"
     results_dir = base / "RESULTS"

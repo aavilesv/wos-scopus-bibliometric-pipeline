@@ -25,6 +25,67 @@ def _save_csv_utf8sig(df: pd.DataFrame, path: Path) -> None:
 
 
 # ------------------------------------------------------------
+# Combinar Author Keywords + Index Keywords
+# ------------------------------------------------------------
+def _create_bothkeywords_column(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Crea columna 'bothkeywords' combinando 'Author Keywords' e 'Index Keywords'.
+    Si alguna está vacía, usa solo la disponible.
+    """
+    df = df.copy()
+    
+    author_kw_col = "Author Keywords"
+    index_kw_col = "Index Keywords"
+    
+    # Asegurarnos de que existan las columnas
+    if author_kw_col not in df.columns:
+        df[author_kw_col] = ""
+    if index_kw_col not in df.columns:
+        df[index_kw_col] = ""
+    
+    # Convertir a string y rellenar NaN
+    df[author_kw_col] = df[author_kw_col].fillna("").astype(str).str.strip()
+    df[index_kw_col] = df[index_kw_col].fillna("").astype(str).str.strip()
+    
+    # Combinar y eliminar duplicados
+    def combine_keywords(row):
+        author = row[author_kw_col]
+        index = row[index_kw_col]
+        
+        # Recolectar todas las palabras clave
+        all_keywords = []
+        
+        if author:
+            # Dividir por ";" y limpiar espacios
+            author_kws = [kw.strip() for kw in author.split(";") if kw.strip()]
+            all_keywords.extend(author_kws)
+        
+        if index:
+            # Dividir por ";" y limpiar espacios
+            index_kws = [kw.strip() for kw in index.split(";") if kw.strip()]
+            all_keywords.extend(index_kws)
+        
+        if not all_keywords:
+            return ""
+        
+        # Eliminar duplicados manteniendo el orden (case-insensitive comparison)
+        seen_lower = set()
+        unique_keywords = []
+        for kw in all_keywords:
+            kw_lower = kw.lower()
+            if kw_lower not in seen_lower:
+                seen_lower.add(kw_lower)
+                unique_keywords.append(kw)
+        
+        # Unir con "; "
+        return "; ".join(unique_keywords)
+    
+    df["bothkeywords"] = df.apply(combine_keywords, axis=1)
+    
+    return df
+
+
+# ------------------------------------------------------------
 # Excel reporte (solo tablas/resúmenes)
 # ------------------------------------------------------------
 def _save_report_excel(sheets: Dict[str, pd.DataFrame], path: Path) -> None:
@@ -82,7 +143,7 @@ def save_outputs(
 ) -> Tuple[Path, Path]:
     """
     Guarda:
-      - datawos_scopus.csv
+      - datawos_scopus.csv (con columna bothkeywords)
       - datawos_scopus_repeatedstitles.csv
     Retorna rutas guardadas.
     """
@@ -93,6 +154,9 @@ def save_outputs(
 
     if combined_df is None:
         combined_df = pd.DataFrame()
+    else:
+        # Crear columna bothkeywords: combina Author Keywords + Index Keywords
+        combined_df = _create_bothkeywords_column(combined_df)
 
     dups_df = pd.DataFrame(sorted(list(duplicated_titles)), columns=["Título Repetido"])
 
@@ -272,8 +336,55 @@ def build_report_tables(
     except Exception as e:
         warn("Reporte Document Type", f"No se pudo construir tabla de Document Type por año.\nDetalle: {e}")
 
+    # --- Tabla de Métricas de Calidad Final ---
+    quality_summary = pd.DataFrame()
+    try:
+        if combined_df is not None and not combined_df.empty:
+            total_final = len(combined_df)
+            
+            # DOIs
+            valid_dois = (combined_df.get("DOI", pd.Series()).fillna("").astype(str) != "").sum()
+            blank_dois = total_final - valid_dois
+            
+            # Years
+            years_numeric = pd.to_numeric(combined_df.get("Year", pd.Series()), errors='coerce')
+            valid_years = years_numeric.notna().sum()
+            blank_years = years_numeric.isna().sum()
+            
+            # Titles
+            valid_titles = (combined_df.get("Title", pd.Series()).fillna("").astype(str).str.strip() != "").sum()
+            blank_titles = total_final - valid_titles
+            
+            # bothkeywords (si existe)
+            has_keywords = 0
+            if "bothkeywords" in combined_df.columns:
+                has_keywords = (combined_df["bothkeywords"].fillna("").astype(str).str.strip() != "").sum()
+            
+            quality_summary = pd.DataFrame([
+                ("Total Records (Final)", total_final),
+                ("", ""),
+                ("DOIs - Valid", valid_dois),
+                ("DOIs - Blank", blank_dois),
+                ("DOIs - Valid (%)", round(valid_dois/total_final*100, 1) if total_final else 0),
+                ("", ""),
+                ("Years - Valid", valid_years),
+                ("Years - Missing", blank_years),
+                ("Years - Valid (%)", round(valid_years/total_final*100, 1) if total_final else 0),
+                ("", ""),
+                ("Titles - Valid", valid_titles),
+                ("Titles - Blank", blank_titles),
+                ("Titles - Valid (%)", round(valid_titles/total_final*100, 1) if total_final else 0),
+                ("", ""),
+                ("Keywords - With Data", has_keywords),
+                ("Keywords - Blank", total_final - has_keywords),
+                ("Keywords - With Data (%)", round(has_keywords/total_final*100, 1) if total_final else 0),
+            ], columns=["Metric", "Value"])
+    except Exception as e:
+        warn("Reporte Calidad", f"No se pudo construir tabla de calidad final.\nDetalle: {e}")
+
     return {
         "stats_summary": stats_summary,
+        "quality_summary": quality_summary,
         "dedup_distribution": dedup_distribution,
         "raw_counts_by_year": raw_counts,
         "raw_citations_by_year": raw_citations,

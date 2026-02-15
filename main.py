@@ -13,6 +13,8 @@ import config  # Archivo de configuración con rutas y constantes
 from logging_utils import setup_logger  # Sistema de logs (reemplaza print)
 # Funciones para validar archivos de entrada antes de empezar
 from file_validation import build_default_paths, scan_inputs, validate_or_stop, PipelinePaths
+# Nueva Validación de Calidad
+from data_quality import validate_quality
 
 # --- Importaciones de Lógica de Negocio (Módulos) ---
 from loaders import load_merge_scopus, load_merge_wos  # Carga y limpieza inicial
@@ -88,12 +90,16 @@ def main() -> None:
         logger.info("Processing Scopus files...")
         # load_merge_scopus: Lee CSVs, limpia autores, normaliza títulos y hace deduplicación interna
         scopus_df, original_scopus = load_merge_scopus(inv.scopus_files)
+        # --- VALIDACIÓN DE CALIDAD SCOPUS ---
+        scopus_df = validate_quality(scopus_df, "Scopus")
         logger.info(f"Scopus merged: {len(scopus_df)} unique records (from {original_scopus} raw)")
 
     if has_wos:
         logger.info("Processing WoS files...")
         # load_merge_wos: Lee Excels, mapea columnas y hace deduplicación interna
         wos_df, original_wos = load_merge_wos(inv.wos_files)
+        # --- VALIDACIÓN DE CALIDAD WOS ---
+        wos_df = validate_quality(wos_df, "WoS")
         logger.info(f"WoS merged: {len(wos_df)} unique records (from {original_wos} raw)")
 
     # --------------------------------------------------------
