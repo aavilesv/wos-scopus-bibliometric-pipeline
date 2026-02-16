@@ -28,7 +28,7 @@ YEAR_FINAL = 2025
 
 # Umbral de similitud para deduplicación (85%)
 # Significa que títulos con >= 85% de similitud serán considerados duplicados
-FUZZY_THRESHOLD = 85
+FUZZY_THRESHOLD = 75
 
 # Umbral de similitud para encontrar revistas en SCImago (90% es más estricto)
 SCIMAGO_FUZZY_THRESHOLD = 90

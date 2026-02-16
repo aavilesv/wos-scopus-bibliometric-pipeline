@@ -43,7 +43,7 @@ def clean_doi(doi_value: str) -> str:
     
     return ""
 
-def validate_quality(df: pd.DataFrame, source_name: str, remove_blank_dois: bool = False) -> pd.DataFrame:
+def validate_quality(df: pd.DataFrame, source_name: str, remove_blank_dois: bool = True) -> pd.DataFrame:
     """
     Aplica limpieza crítica (DOI) y reporta estadísticas de calidad.
     

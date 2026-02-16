@@ -172,6 +172,47 @@ def save_outputs(
 
     return out_main, out_dups
 
+def compute_quality_metrics(df):
+    if df is None or df.empty:
+        return 0, 0, 0, 0, 0
+
+    total = len(df)
+
+    valid_dois = (
+        df.get("DOI", pd.Series())
+        .fillna("")
+        .astype(str)
+        .str.strip() != ""
+    ).sum()
+
+    valid_titles = (
+        df.get("Title", pd.Series())
+        .fillna("")
+        .astype(str)
+        .str.strip() != ""
+    ).sum()
+
+    valid_authors = (
+        df.get("Authors", pd.Series())
+        .fillna("")
+        .astype(str)
+        .str.strip() != ""
+    ).sum()
+
+    valid_abstracts = (
+        df.get("Abstract", pd.Series())
+        .fillna("")
+        .astype(str)
+        .str.strip() != ""
+    ).sum()
+
+    return (
+        total,
+        valid_dois,
+        valid_titles,
+        valid_authors,
+        valid_abstracts
+    )
 
 # ------------------------------------------------------------
 # 2) Construcción de tablas de reporte (lo que antes era print)
@@ -210,6 +251,54 @@ def build_report_tables(
     duplicated_papers_found = int(len(duplicated_titles))
 
     final_total = int(len(combined_df)) if combined_df is not None else 0
+    valid_dois = 0
+    valid_titles = 0
+    valid_authors = 0
+    valid_abstracts = 0
+
+    if combined_df is not None and not combined_df.empty:
+        total_final = len(combined_df)
+
+        # DOIs
+        valid_dois = (
+            combined_df.get("DOI", pd.Series())
+            .fillna("")
+            .astype(str)
+            .str.strip() != ""
+        ).sum()
+
+        # Titles
+        valid_titles = (
+            combined_df.get("Title", pd.Series())
+            .fillna("")
+            .astype(str)
+            .str.strip() != ""
+        ).sum()
+
+        # Authors
+        valid_authors = (
+            combined_df.get("Authors", pd.Series())
+            .fillna("")
+            .astype(str)
+            .str.strip() != ""
+        ).sum()
+        # Abstracts
+        valid_abstracts = (
+            combined_df.get("Abstract", pd.Series())
+            .fillna("")
+            .astype(str)
+            .str.strip() != ""
+        ).sum()
+        doi_pct = round(valid_dois / total_final * 100, 1) if total_final else 0
+        title_pct = round(valid_titles / total_final * 100, 1) if total_final else 0
+        author_pct = round(valid_authors / total_final * 100, 1) if total_final else 0
+        abstract_pct = round(valid_abstracts / total_final * 100, 1) if total_final else 0
+
+    else:
+        total_final = 0
+        doi_pct = title_pct = author_pct = 0
+        abstract_pct = 0
+
     final_wos_count = int(len(df_wos_renombrado)) if df_wos_renombrado is not None else 0
     final_scopus_count = scopus_unique_count
 
@@ -222,6 +311,20 @@ def build_report_tables(
     removed_wos_percentage = (removed_wos / original_wos_count * 100) if original_wos_count else 0
     removed_scopus_percentage = (removed_scopus / original_scopus_count * 100) if original_scopus_count else 0
     duplicated_percentage = (duplicated_papers_found / total_loaded * 100) if total_loaded else 0
+    # Calidad antes de filtros finales
+  # Dataset antes del merge final
+    if scopus_df is not None and wos_df is not None:
+        before_df = pd.concat([scopus_df, wos_df], ignore_index=True)
+    elif scopus_df is not None:
+        before_df = scopus_df
+    elif wos_df is not None:
+        before_df = wos_df
+    else:
+        before_df = None
+
+    before_total, before_doi, before_title, before_auth, before_abs = compute_quality_metrics(
+        before_df
+    )
 
     stats_summary = pd.DataFrame(
         [
@@ -243,6 +346,27 @@ def build_report_tables(
             ("Final WoS (%)", round(final_wos_percentage, 1)),
             ("Final Scopus", final_scopus_count),
             ("Final Scopus (%)", round(final_scopus_percentage, 1)),
+            ("", ""),
+            ("QUALITY CHECK (Before Filters)", ""),
+            ("Records with DOI", before_doi),
+            ("Records with DOI (%)", round(before_doi / before_total * 100, 1) if before_total else 0),
+            ("Records with Title", before_title),
+            ("Records with Title (%)", round(before_title / before_total * 100, 1) if before_total else 0),
+            ("Records with Authors", before_auth),
+            ("Records with Authors (%)", round(before_auth / before_total * 100, 1) if before_total else 0),
+            ("Records with Abstract", before_abs),
+            ("Records with Abstract (%)", round(before_abs / before_total * 100, 1) if before_total else 0),
+
+            ("", ""),
+            ("QUALITY CHECK (Final Dataset)", ""),
+            ("Records with DOI", valid_dois),
+            ("Records with DOI (%)", doi_pct),
+            ("Records with Title", valid_titles),
+            ("Records with Title (%)", title_pct),
+            ("Records with Authors", valid_authors),
+            ("Records with Authors (%)", author_pct),
+            ("Records with Abstract", valid_abstracts),
+            ("Records with Abstract (%)", abstract_pct),
         ],
         columns=["Metric", "Value"]
     )

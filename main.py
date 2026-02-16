@@ -200,6 +200,11 @@ def main() -> None:
 
     logger.info(f"Saving results to: {paths.results_dir}")
     # Guarda los CSVs finales
+    combined_df = combined_df[
+    (combined_df["Title"].fillna("").str.strip() != "") &
+    (combined_df["Authors"].fillna("").str.strip() != "") &
+    (combined_df["Abstract"].fillna("").str.strip() != "")
+]
     save_outputs(combined_df, duplicated_titles, paths.results_dir)
 
     # --------------------------------------------------------
