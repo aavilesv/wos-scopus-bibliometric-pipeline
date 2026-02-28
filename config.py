@@ -23,9 +23,9 @@ RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 # Parámetros de Análisis (Analysis Parameters)
 # Rango de años a filtrar (inclusive)
-YEAR_START = 2023
+YEAR_START = 2015
 YEAR_FINAL = 2025
-
+remove_blank_dois = True ## validar los doi si quieres que elimine o no
 # Umbral de similitud para deduplicación (85%)
 # Significa que títulos con >= 85% de similitud serán considerados duplicados
 FUZZY_THRESHOLD = 75

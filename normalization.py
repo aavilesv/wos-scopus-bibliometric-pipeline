@@ -165,7 +165,7 @@ def apply_post_merge_normalization(
     scimago_map: dict,
     year_start: int,
     year_end: int,
-) -> pd.DataFrame:
+) -> tuple[pd.DataFrame, dict]:
     """
     Aplica lo que hacías después del concat:
       - filtrar años
@@ -176,15 +176,19 @@ def apply_post_merge_normalization(
       - Cited by int
       - drop processed_title
     """
+    stats = {"removed_out_of_years": 0}
+
     if combined_df is None or combined_df.empty:
-        return pd.DataFrame()
+        return pd.DataFrame(), stats
 
     df = combined_df.copy()
 
     # Year filter
     if "Year" in df.columns:
+        before_len = len(df)
         df["Year"] = pd.to_numeric(df["Year"], errors="coerce")
         df = df[df["Year"].between(year_start, year_end)]
+        stats["removed_out_of_years"] = before_len - len(df)
 
     # ISSN
     if "ISSN" in df.columns:
@@ -222,5 +226,5 @@ def apply_post_merge_normalization(
     if "processed_title" in df.columns:
         df.drop(columns=["processed_title"], inplace=True)
 
-    return df
+    return df, stats
 

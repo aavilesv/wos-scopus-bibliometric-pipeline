@@ -229,90 +229,74 @@ def build_report_tables(
     duplicated_titles: Set[str],
     year_start: int,
     year_end: int,
+    scopus_stats: Optional[Dict] = None,
+    wos_stats: Optional[Dict] = None,
+    removed_post_merge: int = 0
 ) -> Dict[str, pd.DataFrame]:
     """
     Devuelve un dict {sheet_name: df} para exportar a Excel.
     Replica la lógica de tus prints, pero en tablas.
     """
 
-    # --- Conteos base ---
-    total_loaded = int(original_scopus_count + original_wos_count)
-    omitted_papers = 0
-    after_omission_total = total_loaded
-
-    scopus_unique_count = int(len(scopus_df)) if scopus_df is not None else 0
-
-    # En tu script: removed_wos = original_wos_count - len(wos_non_repeated)
-    wos_non_rep_count = int(len(wos_non_repeated)) if wos_non_repeated is not None else 0
-    removed_wos = int(original_wos_count - wos_non_rep_count) if original_wos_count else 0
-
-    removed_scopus = int(original_scopus_count - scopus_unique_count) if original_scopus_count else 0
-
-    duplicated_papers_found = int(len(duplicated_titles))
-
-    final_total = int(len(combined_df)) if combined_df is not None else 0
-    valid_dois = 0
-    valid_titles = 0
-    valid_authors = 0
-    valid_abstracts = 0
-
+    # --- Counts for Funnel ---
+    
+    # 1. Raw Loaded (Identification)
+    raw_scopus = int(original_scopus_count)
+    raw_wos = int(original_wos_count)
+    total_loaded = raw_scopus + raw_wos
+    
+    scopus_int_dups = scopus_stats.get('internal_duplicates', 0) if scopus_stats else 0
+    wos_int_dups = wos_stats.get('internal_duplicates', 0) if wos_stats else 0
+    
+    # 2. After Internal Dedup
+    after_int_scopus = raw_scopus - scopus_int_dups
+    after_int_wos = raw_wos - wos_int_dups
+    
+    # 3. Quality Removed
+    sc_qty_rem = 0
+    if scopus_stats:
+        sc_qty_rem = scopus_stats.get('removed_doi',0) + scopus_stats.get('removed_title',0) + \
+                     scopus_stats.get('removed_authors',0) + scopus_stats.get('removed_abstract',0)
+                     
+    wo_qty_rem = 0
+    if wos_stats:
+        wo_qty_rem = wos_stats.get('removed_doi',0) + wos_stats.get('removed_title',0) + \
+                     wos_stats.get('removed_authors',0) + wos_stats.get('removed_abstract',0)
+                     
+    after_qual_scopus = after_int_scopus - sc_qty_rem
+    after_qual_wos = after_int_wos - wo_qty_rem
+    after_qual_total = after_qual_scopus + after_qual_wos
+    
+    # 4. Cross Dedup (assuming usually cross duplicates are removed from WoS)
+    cross_dups = len(duplicated_titles)
+    
+    # 5. Final Counts
     if combined_df is not None and not combined_df.empty:
         total_final = len(combined_df)
-
-        # DOIs
-        valid_dois = (
-            combined_df.get("DOI", pd.Series())
-            .fillna("")
-            .astype(str)
-            .str.strip() != ""
-        ).sum()
-
-        # Titles
-        valid_titles = (
-            combined_df.get("Title", pd.Series())
-            .fillna("")
-            .astype(str)
-            .str.strip() != ""
-        ).sum()
-
-        # Authors
-        valid_authors = (
-            combined_df.get("Authors", pd.Series())
-            .fillna("")
-            .astype(str)
-            .str.strip() != ""
-        ).sum()
-        # Abstracts
-        valid_abstracts = (
-            combined_df.get("Abstract", pd.Series())
-            .fillna("")
-            .astype(str)
-            .str.strip() != ""
-        ).sum()
-        doi_pct = round(valid_dois / total_final * 100, 1) if total_final else 0
-        title_pct = round(valid_titles / total_final * 100, 1) if total_final else 0
-        author_pct = round(valid_authors / total_final * 100, 1) if total_final else 0
-        abstract_pct = round(valid_abstracts / total_final * 100, 1) if total_final else 0
-
+        sources_series = combined_df.get("Source", pd.Series(dtype=str)).astype(str).str.lower()
+        final_scopus = int((sources_series == "scopus").sum())
+        final_wos = total_final - final_scopus  # The rest are WoS
     else:
         total_final = 0
-        doi_pct = title_pct = author_pct = 0
-        abstract_pct = 0
+        final_scopus = 0
+        final_wos = 0
 
-    final_wos_count = int(len(df_wos_renombrado)) if df_wos_renombrado is not None else 0
-    final_scopus_count = scopus_unique_count
+    # Removed at the end due to cross deduplication + post-merge cleanup
+    # We attribute unknown removals proportionately or based on theoretical flows
+    total_removed_scopus = raw_scopus - final_scopus
+    total_removed_wos = raw_wos - final_wos
 
-    percentage_wos_loaded = (original_wos_count / total_loaded * 100) if total_loaded else 0
-    percentage_scopus_loaded = (original_scopus_count / total_loaded * 100) if total_loaded else 0
+    # Proportions
+    raw_scopus_pct = round((raw_scopus / total_loaded * 100), 1) if total_loaded else 0
+    raw_wos_pct = round((raw_wos / total_loaded * 100), 1) if total_loaded else 0
+    
+    final_scopus_pct = round((final_scopus / total_final * 100), 1) if total_final else 0
+    final_wos_pct = round((final_wos / total_final * 100), 1) if total_final else 0
 
-    final_wos_percentage = (final_wos_count / final_total * 100) if final_total else 0
-    final_scopus_percentage = (final_scopus_count / final_total * 100) if final_total else 0
+    removed_scopus_pct = round((total_removed_scopus / raw_scopus * 100), 1) if raw_scopus else 0
+    removed_wos_pct = round((total_removed_wos / raw_wos * 100), 1) if raw_wos else 0
 
-    removed_wos_percentage = (removed_wos / original_wos_count * 100) if original_wos_count else 0
-    removed_scopus_percentage = (removed_scopus / original_scopus_count * 100) if original_scopus_count else 0
-    duplicated_percentage = (duplicated_papers_found / total_loaded * 100) if total_loaded else 0
-    # Calidad antes de filtros finales
-  # Dataset antes del merge final
+    # Dataset before the final merge
     if scopus_df is not None and wos_df is not None:
         before_df = pd.concat([scopus_df, wos_df], ignore_index=True)
     elif scopus_df is not None:
@@ -322,32 +306,52 @@ def build_report_tables(
     else:
         before_df = None
 
-    before_total, before_doi, before_title, before_auth, before_abs = compute_quality_metrics(
-        before_df
-    )
+    before_total, before_doi, before_title, before_auth, before_abs = compute_quality_metrics(before_df)
+
+    valid_dois = valid_titles = valid_authors = valid_abstracts = 0
+    doi_pct = title_pct = author_pct = abstract_pct = 0
+    
+    if combined_df is not None and not combined_df.empty:
+        valid_dois = (combined_df.get("DOI", pd.Series()).fillna("").astype(str).str.strip() != "").sum()
+        valid_titles = (combined_df.get("Title", pd.Series()).fillna("").astype(str).str.strip() != "").sum()
+        valid_authors = (combined_df.get("Authors", pd.Series()).fillna("").astype(str).str.strip() != "").sum()
+        valid_abstracts = (combined_df.get("Abstract", pd.Series()).fillna("").astype(str).str.strip() != "").sum()
+        
+        doi_pct = round(valid_dois / total_final * 100, 1) if total_final else 0
+        title_pct = round(valid_titles / total_final * 100, 1) if total_final else 0
+        author_pct = round(valid_authors / total_final * 100, 1) if total_final else 0
+        abstract_pct = round(valid_abstracts / total_final * 100, 1) if total_final else 0
 
     stats_summary = pd.DataFrame(
         [
-            ("Loaded papers", total_loaded),
-            ("Omitted papers by document type", omitted_papers),
-            ("Total after omission", after_omission_total),
-            ("Loaded WoS", original_wos_count),
-            ("Loaded WoS (%)", round(percentage_wos_loaded, 1)),
-            ("Loaded Scopus", original_scopus_count),
-            ("Loaded Scopus (%)", round(percentage_scopus_loaded, 1)),
-            ("Duplicated papers found", duplicated_papers_found),
-            ("Duplicated papers found (%)", round(duplicated_percentage, 1)),
-            ("Removed duplicated WoS", removed_wos),
-            ("Removed duplicated WoS (%)", round(removed_wos_percentage, 1)),
-            ("Removed duplicated Scopus", removed_scopus),
-            ("Removed duplicated Scopus (%)", round(removed_scopus_percentage, 1)),
-            ("Total after duplicates removal", final_total),
-            ("Final WoS", final_wos_count),
-            ("Final WoS (%)", round(final_wos_percentage, 1)),
-            ("Final Scopus", final_scopus_count),
-            ("Final Scopus (%)", round(final_scopus_percentage, 1)),
+            ("1. RAW DATA", ""),
+            ("Loaded papers (Total)", total_loaded),
+            ("Loaded WoS", raw_wos),
+            ("Loaded WoS (%)", raw_wos_pct),
+            ("Loaded Scopus", raw_scopus),
+            ("Loaded Scopus (%)", raw_scopus_pct),
+            ("", ""),
+            ("2. DEDUPLICATION & FILTERING TOTALS", ""),
+            ("Internal Duplicates Removed (Scopus)", scopus_int_dups),
+            ("Internal Duplicates Removed (WoS)", wos_int_dups),
+            ("Quality Failed Records Removed (Scopus)", sc_qty_rem),
+            ("Quality Failed Records Removed (WoS)", wo_qty_rem),
+            ("Cross-Database Duplicates Removed", cross_dups),
+            ("Post-Merge/Year Filtering Removed", removed_post_merge),
+            ("", ""),
+            ("3. FINAL DATASET", ""),
+            ("Total Removed (Scopus)", total_removed_scopus),
+            ("Total Removed (Scopus %)", removed_scopus_pct),
+            ("Total Removed (WoS)", total_removed_wos),
+            ("Total Removed (WoS %)", removed_wos_pct),
+            ("Total Resulting Papers", total_final),
+            ("Final WoS", final_wos),
+            ("Final WoS (%)", final_wos_pct),
+            ("Final Scopus", final_scopus),
+            ("Final Scopus (%)", final_scopus_pct),
             ("", ""),
             ("QUALITY CHECK (Before Filters)", ""),
+            ("Total records before quality filters", before_total),
             ("Records with DOI", before_doi),
             ("Records with DOI (%)", round(before_doi / before_total * 100, 1) if before_total else 0),
             ("Records with Title", before_title),
@@ -356,9 +360,9 @@ def build_report_tables(
             ("Records with Authors (%)", round(before_auth / before_total * 100, 1) if before_total else 0),
             ("Records with Abstract", before_abs),
             ("Records with Abstract (%)", round(before_abs / before_total * 100, 1) if before_total else 0),
-
             ("", ""),
             ("QUALITY CHECK (Final Dataset)", ""),
+            ("Total records after quality filters", total_final),
             ("Records with DOI", valid_dois),
             ("Records with DOI (%)", doi_pct),
             ("Records with Title", valid_titles),
@@ -375,8 +379,8 @@ def build_report_tables(
     dedup_distribution = pd.DataFrame(
         {
             "Source": ["WoS", "Scopus"],
-            "Kept": [final_wos_count, final_scopus_count],
-            "Removed": [removed_wos, removed_scopus],
+            "Kept": [final_wos, final_scopus],
+            "Removed": [total_removed_wos, total_removed_scopus],
         }
     )
     dedup_distribution["Total"] = dedup_distribution["Kept"] + dedup_distribution["Removed"]
@@ -460,6 +464,74 @@ def build_report_tables(
     except Exception as e:
         warn("Reporte Document Type", f"No se pudo construir tabla de Document Type por año.\nDetalle: {e}")
 
+    # --- PRISMA Flow ---
+    prisma_steps = []
+    
+    # 1. Identification
+    sc_internal_dups = scopus_stats.get("internal_duplicates", 0) if scopus_stats else 0
+    wo_internal_dups = wos_stats.get("internal_duplicates", 0) if wos_stats else 0
+    
+    prisma_steps.append(("1. Records identified from Scopus", original_scopus_count))
+    prisma_steps.append(("1. Records identified from WoS", original_wos_count))
+    prisma_steps.append(("Records identified (Total)", total_loaded))
+    prisma_steps.append(("", ""))
+    
+    # 2. Screening - Internal Duplicates
+    prisma_steps.append(("2. Internal duplicates removed (Scopus)", sc_internal_dups))
+    prisma_steps.append(("2. Internal duplicates removed (WoS)", wo_internal_dups))
+    prisma_steps.append(("Records after internal deduplication", total_loaded - sc_internal_dups - wo_internal_dups))
+    prisma_steps.append(("", ""))
+    
+    # 3. Screening - Quality Checks (Scopus)
+    sc_doi = scopus_stats.get("removed_doi", 0) if scopus_stats else 0
+    sc_title = scopus_stats.get("removed_title", 0) if scopus_stats else 0
+    sc_author = scopus_stats.get("removed_authors", 0) if scopus_stats else 0
+    sc_abstract = scopus_stats.get("removed_abstract", 0) if scopus_stats else 0
+    
+    prisma_steps.append(("3. Missing/Invalid DOIs removed (Scopus)", sc_doi))
+    prisma_steps.append(("3. Missing Titles removed (Scopus)", sc_title))
+    prisma_steps.append(("3. Missing Authors removed (Scopus)", sc_author))
+    prisma_steps.append(("3. Missing Abstracts removed (Scopus)", sc_abstract))
+    
+    # 4. Screening - Quality Checks (WoS)
+    wo_doi = wos_stats.get("removed_doi", 0) if wos_stats else 0
+    wo_title = wos_stats.get("removed_title", 0) if wos_stats else 0
+    wo_author = wos_stats.get("removed_authors", 0) if wos_stats else 0
+    wo_abstract = wos_stats.get("removed_abstract", 0) if wos_stats else 0
+    
+    prisma_steps.append(("4. Missing/Invalid DOIs removed (WoS)", wo_doi))
+    prisma_steps.append(("4. Missing Titles removed (WoS)", wo_title))
+    prisma_steps.append(("4. Missing Authors removed (WoS)", wo_author))
+    prisma_steps.append(("4. Missing Abstracts removed (WoS)", wo_abstract))
+    
+    records_after_quality = (scopus_stats.get("final_count", 0) if scopus_stats else scopus_unique_count) + \
+                            (wos_stats.get("final_count", 0) if wos_stats else wos_non_rep_count + removed_wos) # Approximation if stats missing
+                            
+    prisma_steps.append(("Records screened for quality", records_after_quality))
+    prisma_steps.append(("", ""))
+    
+    prisma_steps.append(("5. Cross-database duplicates removed", cross_dups))
+    prisma_steps.append(("5. Post-Merge / Year filtering removed", removed_post_merge))
+    prisma_steps.append(("Total records included for synthesis", total_final))
+    
+    prisma_flow = pd.DataFrame(prisma_steps, columns=["PRISMA Step", "Count"])
+
+    # --- Methodology ---
+    methodology_steps = [
+        ("Step", "Description", "Python/Library Details"),
+        ("1. Data Loading", "Load CSVs from Scopus and Excel from WoS.", "pandas.read_csv, pandas.read_excel"),
+        ("2. Internal Deduplication", "Remove duplicate rows within the same database based on Title.", "pandas.drop_duplicates(subset=['processed_title'])"),
+        ("3. Quality: DOI Cleaning", "Extract valid DOIs using regular expressions and remove empty.", "re.search(r'(10\\.\\d{4,9}/[-._;()/:a-z0-9]+)'), df[df['DOI'] != '']"),
+        ("4. Quality: Missing Titles", "Remove records where the title is completely empty.", "df[df['Title'].fillna('').str.strip() != '']"),
+        ("5. Quality: Missing Authors", "Remove records where authors are missing.", "df[df['Authors'].fillna('').str.strip() != '']"),
+        ("6. Quality: Missing Abstracts", "Remove records where abstract is missing.", "df[df['Abstract'].fillna('').str.strip() != '']"),
+        ("7. Cross-Deduplication", "Fuzzy matching to find overlapping titles between Scopus and WoS.", "thefuzz.fuzz.token_set_ratio > config.FUZZY_THRESHOLD"),
+        ("8. Merging", "Normalize WoS columns to Scopus schema and concatenate.", "pandas.concat([scopus, wos_normalized])"),
+        ("9. Enriching", "Add SCImago Quartiles and Metrics based on ISSN/Journal Title.", "pandas.merge(combined_df, scimago_df)")
+    ]
+    
+    methodology_df = pd.DataFrame(methodology_steps[1:], columns=methodology_steps[0])
+
     # --- Tabla de Métricas de Calidad Final ---
     quality_summary = pd.DataFrame()
     try:
@@ -508,6 +580,8 @@ def build_report_tables(
 
     return {
         "stats_summary": stats_summary,
+        "PRISMA_Flow": prisma_flow,
+        "Methodology": methodology_df,
         "quality_summary": quality_summary,
         "dedup_distribution": dedup_distribution,
         "raw_counts_by_year": raw_counts,

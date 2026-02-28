@@ -85,21 +85,41 @@ def main() -> None:
     wos_df = pd.DataFrame()
     original_scopus = 0  # Contadores para estadísticas
     original_wos = 0
+    scopus_stats = {}
+    wos_stats = {}
 
     if has_scopus:
         logger.info("Processing Scopus files...")
-        # load_merge_scopus: Lee CSVs, limpia autores, normaliza títulos y hace deduplicación interna
         scopus_df, original_scopus = load_merge_scopus(inv.scopus_files)
+        scopus_internal_dups = original_scopus - len(scopus_df)
+        
         # --- VALIDACIÓN DE CALIDAD SCOPUS ---
-        scopus_df = validate_quality(scopus_df, "Scopus")
+        scopus_after_internal = len(scopus_df)
+        scopus_df, scopus_stats = validate_quality(scopus_df, "Scopus")
+        scopus_stats['internal_duplicates'] = scopus_internal_dups
+        
+        # [Assertion] Stage_n - Removed_n = Stage_n+1
+        sc_quality_removed = (scopus_stats.get('removed_doi', 0) + scopus_stats.get('removed_title', 0) + 
+                              scopus_stats.get('removed_authors', 0) + scopus_stats.get('removed_abstract', 0))
+        assert scopus_after_internal - sc_quality_removed == len(scopus_df), "Scopus Quality conservation failed"
+        
         logger.info(f"Scopus merged: {len(scopus_df)} unique records (from {original_scopus} raw)")
 
     if has_wos:
         logger.info("Processing WoS files...")
-        # load_merge_wos: Lee Excels, mapea columnas y hace deduplicación interna
         wos_df, original_wos = load_merge_wos(inv.wos_files)
+        wos_internal_dups = original_wos - len(wos_df)
+        
         # --- VALIDACIÓN DE CALIDAD WOS ---
-        wos_df = validate_quality(wos_df, "WoS")
+        wos_after_internal = len(wos_df)
+        wos_df, wos_stats = validate_quality(wos_df, "WoS")
+        wos_stats['internal_duplicates'] = wos_internal_dups
+        
+        # [Assertion] Stage_n - Removed_n = Stage_n+1
+        wos_quality_removed = (wos_stats.get('removed_doi', 0) + wos_stats.get('removed_title', 0) + 
+                               wos_stats.get('removed_authors', 0) + wos_stats.get('removed_abstract', 0))
+        assert wos_after_internal - wos_quality_removed == len(wos_df), "WoS Quality conservation failed"
+        
         logger.info(f"WoS merged: {len(wos_df)} unique records (from {original_wos} raw)")
 
     # --------------------------------------------------------
@@ -135,10 +155,12 @@ def main() -> None:
 
     if has_wos and not wos_df.empty:
         logger.info("Normalizing WoS schema to Scopus...")
-        # normalize_wos_to_scopus_schema: 
-        #   1. Filtra los duplicados (mantiene solo los únicos de WoS)
-        #   2. Renombra columnas de WoS (ej. "Publication Year" -> "Year") para coincidir con Scopus
+        wos_before_cross = len(wos_df)
         wos_non_repeated, wos_norm = normalize_wos_to_scopus_schema(wos_df)
+        
+        # [Assertion] Ensure exactly the duplicate titles flag removed the right amount of WoS records
+        # Note: If there were any duplicates, they should equal the difference
+        assert wos_before_cross - len(wos_non_repeated) == len(wos_df[wos_df['In_Both'] == 1]), "Cross Deduplication conservation failed"
 
     # --------------------------------------------------------
     # 7) Combinación Final (Merge)
@@ -150,7 +172,12 @@ def main() -> None:
         parts.append(wos_norm) # Solo agregamos la versión normalizada y SIN duplicados de WoS
 
     # pd.concat une los dataframes verticalmente
+    scopus_to_merge_len = len(scopus_df) if has_scopus else 0
+    wos_to_merge_len = len(wos_norm) if has_wos else 0
     combined_df = pd.concat(parts, ignore_index=True) if parts else pd.DataFrame()
+    
+    # [Assertion] Merge conservation
+    assert len(combined_df) == scopus_to_merge_len + wos_to_merge_len, "Merge conservation failed"
     logger.info(f"Combined dataset: {len(combined_df)} rows")
 
     # --------------------------------------------------------
@@ -164,28 +191,38 @@ def main() -> None:
     # 9) Normalización Post-Merge
     # --------------------------------------------------------
     logger.info(f"Applying post-merge normalization (Years: {config.YEAR_START}-{config.YEAR_FINAL})...")
-    # Limpiezas finales: rangos de años, países, afiliaciones, etc.
-    combined_df = apply_post_merge_normalization(
+    before_year_filter = len(combined_df)
+    
+    combined_df, norm_stats = apply_post_merge_normalization(
         combined_df=combined_df,
         scimago_map=scimago_map,
         year_start=config.YEAR_START,
         year_end=config.YEAR_FINAL,
     )
+    removed_out_of_years = norm_stats.get("removed_out_of_years", 0)
+    
+    # [Assertion] Post-Merge filtering conservation
+    assert before_year_filter - removed_out_of_years == len(combined_df), "Year filtering conservation failed"
     
     # --------------------------------------------------------
     # 10) Enriquecimiento con Métricas (SCImago SJR, Quartiles)
     # --------------------------------------------------------
     logger.info("Enriching with SCImago metrics...")
+    before_enrichment = len(combined_df)
     combined_df = enrich_with_scimago(
         combined_df=combined_df,
         scimago_df=scimago_df,
         fuzzy_threshold=config.SCIMAGO_FUZZY_THRESHOLD
     )
+    
+    # [Assertion] Enrichment doesn't drop records
+    assert len(combined_df) == before_enrichment, "SCImago enrichment unexpectedly dropped/added records"
 
     # --------------------------------------------------------
     # 11) Guardado de Archivos y Limpieza Final
     # --------------------------------------------------------
     # Última pasada de deduplicación exacta por si acaso
+    removed_post_merge = 0
     if not combined_df.empty and {"Title", "Year"}.issubset(combined_df.columns):
         before_final = len(combined_df)
         combined_df["Title"] = combined_df["Title"].astype(str).str.strip()
@@ -195,16 +232,12 @@ def main() -> None:
             keep="first"
         ).reset_index(drop=True)
         after_final = len(combined_df)
-        if before_final != after_final:
-            logger.info(f"Final cleanup (exact Title+Year): Removed {before_final - after_final} duplicates.")
+        removed_post_merge = before_final - after_final
+        if removed_post_merge > 0:
+            logger.info(f"Final cleanup (exact Title+Year): Removed {removed_post_merge} duplicates.")
 
     logger.info(f"Saving results to: {paths.results_dir}")
     # Guarda los CSVs finales
-    combined_df = combined_df[
-    (combined_df["Title"].fillna("").str.strip() != "") &
-    (combined_df["Authors"].fillna("").str.strip() != "") &
-    (combined_df["Abstract"].fillna("").str.strip() != "")
-]
     save_outputs(combined_df, duplicated_titles, paths.results_dir)
 
     # --------------------------------------------------------
@@ -222,7 +255,10 @@ def main() -> None:
         combined_df=combined_df if not combined_df.empty else None,
         duplicated_titles=duplicated_titles,
         year_start=config.YEAR_START,
-        year_end=config.YEAR_FINAL
+        year_end=config.YEAR_FINAL,
+        scopus_stats=scopus_stats,
+        wos_stats=wos_stats,
+        removed_post_merge=removed_post_merge + removed_out_of_years
     )
     save_report_excel(report_tables, paths.results_dir)
 

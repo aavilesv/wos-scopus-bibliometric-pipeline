@@ -9,7 +9,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 from ui_messages import info, warn
-
+from config import remove_blank_dois
 def clean_doi(doi_value: str) -> str:
     """
     Intenta extraer un DOI válido de una cadena sucia.
@@ -43,9 +43,9 @@ def clean_doi(doi_value: str) -> str:
     
     return ""
 
-def validate_quality(df: pd.DataFrame, source_name: str, remove_blank_dois: bool = True) -> pd.DataFrame:
+def validate_quality(df: pd.DataFrame, source_name: str, remove_blank_dois: bool = remove_blank_dois) -> tuple[pd.DataFrame, dict]:
     """
-    Aplica limpieza crítica (DOI) y reporta estadísticas de calidad.
+    Aplica limpieza crítica secuencial (DOI, Title, Authors, Abstract) y reporta estadísticas para PRISMA.
     
     Args:
         df: DataFrame a validar
@@ -53,84 +53,82 @@ def validate_quality(df: pd.DataFrame, source_name: str, remove_blank_dois: bool
         remove_blank_dois: Si True, elimina registros sin DOI válido
     
     Returns:
-        DataFrame con la columna DOI limpia (y opcionalmente filtrado)
+        tuple: (DataFrame limpio, diccionario con métricas PRISMA)
     """
+    stats = {
+        "initial_count": len(df),
+        "removed_doi": 0,
+        "removed_title": 0,
+        "removed_authors": 0,
+        "removed_abstract": 0,
+        "final_count": len(df)
+    }
+
     if df.empty:
         warn(f"Calidad {source_name}", "El DataFrame está vacío, saltando validación.")
-        return df
+        return df, stats
 
-    initial_count = len(df)
-    info(f"Validando calidad ({source_name})", f"Analizando {initial_count} registros...")
+    info(f"Validando calidad PRISMA ({source_name})", f"Analizando {stats['initial_count']} registros...")
     
     # ----------------------------------------------------
-    # 1. Limpieza de DOI
+    # 1. Limpieza y Filtrado de DOI
     # ----------------------------------------------------
     if "DOI" in df.columns:
-        # Métricas ANTES
-        original_dois = df["DOI"].fillna("").astype(str)
-        # Contamos cuántos tenían "algo" (longitud > 3 para filtrar ruidos mínimos) antes
-        total_phisical_dois_before = original_dois[original_dois.str.len() > 3].count()
-        
-        # Aplicar limpieza robusta
         df["DOI"] = df["DOI"].apply(clean_doi)
-        
-        # Métricas DESPUÉS
-        valid_dois_after = (df["DOI"] != "").sum()
-        blank_dois_count = (df["DOI"] == "").sum()
-        
-        # Diferencia: DOIs que creíamos tener vs los que realmente sirven
-        cleaned_invalid_dois = total_phisical_dois_before - valid_dois_after
-        
-        # Reporte
-        msg_doi = f"DOIs Válidos: {valid_dois_after} | En Blanco: {blank_dois_count} (Total registros: {initial_count})"
-        
-        if cleaned_invalid_dois > 0:
-            warn(f"DOIs Limpiados ({source_name})", 
-                 f"Se eliminaron/corrigieron {cleaned_invalid_dois} valores en columna DOI que no eran válidos.")
-        
-        info(f"Reporte DOI ({source_name})", msg_doi)
-        
-        # Opcionalmente eliminar registros sin DOI
         if remove_blank_dois:
-            df_filtered = df[df["DOI"] != ""].copy()
-            removed_count = len(df) - len(df_filtered)
-            if removed_count > 0:
+            before_doi = len(df)
+            df = df[df["DOI"] != ""].copy()
+            stats["removed_doi"] = before_doi - len(df)
+            if stats["removed_doi"] > 0:
                 warn(f"Filtrado DOI ({source_name})", 
-                     f"Se eliminaron {removed_count} registros sin DOI válido ({removed_count/initial_count*100:.1f}%)")
-            df = df_filtered
-    else:
-        warn(f"Falta columna DOI ({source_name})", "No se encontró la columna 'DOI' para validar.")
-
-    # ----------------------------------------------------
-    # 2. Validación de Años
-    # ----------------------------------------------------
-    current_year = datetime.now().year
-    if "Year" in df.columns:
-        years_numeric = pd.to_numeric(df["Year"], errors='coerce')
-        missing_years = years_numeric.isna().sum()
-        
-        # Rango razonable: 1900 a Hoy+2
-        valid_range_mask = (years_numeric >= 1900) & (years_numeric <= (current_year + 2))
-        out_of_range = (years_numeric.notna() & ~valid_range_mask).sum()
-        
-        if missing_years > 0:
-            warn(f"Años Faltantes ({source_name})", f"{missing_years} registros no tienen año válido ({missing_years/initial_count*100:.1f}%).")
-        if out_of_range > 0:
-            warn(f"Años Fuera de Rango ({source_name})", f"{out_of_range} registros tienen años sospechosos (<1900 o >{current_year+2}).")
-            
-    # ----------------------------------------------------
-    # 3. Validación de Títulos
-    # ----------------------------------------------------
-    if "processed_title" in df.columns:
-        empty_titles = (df["processed_title"] == "").sum()
-        if empty_titles > 0:
-            warn(f"Títulos Vacíos ({source_name})", f"{empty_titles} registros no tienen título válido tras preprocesamiento ({empty_titles/initial_count*100:.1f}%).")
-
-    # ----------------------------------------------------
-    # 4. Resumen Final
-    # ----------------------------------------------------
-    final_count = len(df)
-    if final_count != initial_count:
-        info(f"Filtrado Final ({source_name})", f"Registros finales: {final_count} (de {initial_count} inicial, eliminados: {initial_count - final_count})")
+                     f"Se eliminaron {stats['removed_doi']} registros sin DOI válido.")
     
-    return df
+    # ----------------------------------------------------
+    # 2. Filtrado de Títulos Vacíos
+    # ----------------------------------------------------
+    # Nota: usamos 'Title' en lugar de 'processed_title' como filtro fundamental
+    if "Title" in df.columns:
+        before_title = len(df)
+        df["Title"] = df["Title"].fillna("").astype(str).str.strip()
+        df = df[df["Title"] != ""].copy()
+        stats["removed_title"] = before_title - len(df)
+        if stats["removed_title"] > 0:
+            warn(f"Filtrado Título ({source_name})", 
+                 f"Se eliminaron {stats['removed_title']} registros sin Título.")
+
+    # ----------------------------------------------------
+    # 3. Filtrado de Autores Vacíos
+    # ----------------------------------------------------
+    if "Authors" in df.columns:
+        before_authors = len(df)
+        df["Authors"] = df["Authors"].fillna("").astype(str).str.strip()
+        df = df[df["Authors"] != ""].copy()
+        stats["removed_authors"] = before_authors - len(df)
+        if stats["removed_authors"] > 0:
+            warn(f"Filtrado Autores ({source_name})", 
+                 f"Se eliminaron {stats['removed_authors']} registros sin Autores.")
+
+    # ----------------------------------------------------
+    # 4. Filtrado de Abstract Vacío
+    # ----------------------------------------------------
+    if "Abstract" in df.columns:
+        before_abstract = len(df)
+        df["Abstract"] = df["Abstract"].fillna("").astype(str).str.strip()
+        df = df[df["Abstract"] != ""].copy()
+        stats["removed_abstract"] = before_abstract - len(df)
+        if stats["removed_abstract"] > 0:
+            warn(f"Filtrado Abstract ({source_name})", 
+                 f"Se eliminaron {stats['removed_abstract']} registros sin Abstract.")
+
+    # ----------------------------------------------------
+    # 5. Resumen Final PRISMA
+    # ----------------------------------------------------
+    stats["final_count"] = len(df)
+    
+    if stats["final_count"] != stats["initial_count"]:
+        info(f"Resumen Calidad PRISMA ({source_name})", 
+             f"Registros iniciales: {stats['initial_count']} -> Finales: {stats['final_count']}\n"
+             f"Eliminados: DOI={stats['removed_doi']}, Título={stats['removed_title']}, "
+             f"Autores={stats['removed_authors']}, Abstract={stats['removed_abstract']}.")
+    
+    return df, stats
