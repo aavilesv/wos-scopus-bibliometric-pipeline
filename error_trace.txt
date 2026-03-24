@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "debug_wrapper.py", line 6, in <module>
+    import main
+  File "G:\Mi unidad\bibliometric_review\main.py", line 15, in <module>
+    from file_validation import build_default_paths, scan_inputs, validate_or_stop, PipelinePaths
+  File "G:\Mi unidad\bibliometric_review\file_validation.py", line 23, in <module>
+    def build_default_paths(base_dir: Path | None = None) -> PipelinePaths:
+TypeError: unsupported operand type(s) for |: 'type' and 'NoneType'

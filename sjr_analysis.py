@@ -65,7 +65,7 @@ def enrich_with_scimago(
     Enrich final Scopus+WoS dataset with SCImago metadata.
 
     Matching order:
-      1) ISSN + Year
+      1) ISSN + Year (clipped to available SCImago years)
       2) Fuzzy Source title + Year (fallback)
     """
 
@@ -99,96 +99,95 @@ def enrich_with_scimago(
     scimago_exp["Issn"] = scimago_exp["Issn"].astype(str).str.strip()
 
     # --------------------------------------------------------
-    # 1) Merge por ISSN + Year
+    # Ajuste de Años (para coincidir con el rango de SCImago)
     # --------------------------------------------------------
-    by_issn = pd.merge(
-        combined_df,
-        scimago_exp,
+    # Si SCImago solo tiene de 2013 a 2024, artículos de 2005 se cruzan con 2013.
+    min_year = scimago_exp["Year"].min()
+    max_year = scimago_exp["Year"].max()
+    
+    temp_df = combined_df.copy()
+    temp_df["Match_Year"] = pd.to_numeric(temp_df["Year"], errors="coerce").fillna(max_year).astype(float).clip(lower=min_year, upper=max_year).astype(int)
+    
+    # Normalizar ISSN para cruce
+    temp_df["Match_ISSN"] = temp_df["ISSN"].astype(str).str.replace("-", "", regex=False).str.strip()
+    scimago_exp["Match_ISSN"] = scimago_exp["Issn"].str.replace("-", "", regex=False).str.strip()
+
+    # Preparar DataFrames únicos para evitar explosion de filas (dropped/added records bug)
+    scimago_issn = scimago_exp.drop_duplicates(subset=["Match_ISSN", "Year"]).copy()
+    scimago_title = scimago_exp.drop_duplicates(subset=["Source title", "Year"]).copy()
+
+    # --------------------------------------------------------
+    # 1) Merge por ISSN + Match_Year
+    # --------------------------------------------------------
+    merged = pd.merge(
+        temp_df,
+        scimago_issn,
         how="left",
-        left_on=["ISSN", "Year"],
-        right_on=["Issn", "Year"],
+        left_on=["Match_ISSN", "Match_Year"],
+        right_on=["Match_ISSN", "Year"],
         suffixes=("", "_scimago")
     )
 
     # --------------------------------------------------------
-    # 2) Fallback fuzzy por título (sin ISSN)
+    # 2) Fallback fuzzy por título + Match_Year
     # --------------------------------------------------------
-    no_match = by_issn[by_issn["Issn"].isna()].copy()
+    unmatched_mask = merged["Issn"].isna()
 
-    scimago_titles = (
-        scimago_exp["Source title"]
-        .dropna()
-        .astype(str)
-        .unique()
-        .tolist()
-    )
-
-    no_match["Source title"] = no_match["Source title"].apply(
-        lambda x: _best_title_match(x, scimago_titles, fuzzy_threshold)
-    )
-
-    by_title = pd.merge(
-        no_match.dropna(subset=["Source title"]),
-        scimago_exp,
-        how="left",
-        on=["Source title", "Year"],
-        suffixes=("", "_scimago")
-    )
-
-    # --------------------------------------------------------
-    # Conciliación segura (evita columnas duplicadas)
-    # --------------------------------------------------------
-    matched_issn = _deduplicate_columns(
-        by_issn[~by_issn["Issn"].isna()]
-    )
-    matched_title = _deduplicate_columns(
-        by_title[~by_title["Issn"].isna()]
-    )
-
-    matched = pd.concat(
-        [matched_issn, matched_title],
-        ignore_index=True
-    )
-
-    unmatched = combined_df.loc[
-        ~combined_df.index.isin(matched.index)
-    ]
-
-    enriched = pd.concat(
-        [matched, unmatched],
-        ignore_index=True
-    )
-
-    enriched = _deduplicate_columns(enriched)
+    if unmatched_mask.any():
+        scimago_titles = scimago_title["Source title"].dropna().astype(str).unique().tolist()
+        
+        titles_to_match = merged.loc[unmatched_mask, "Source title"]
+        matched_titles = titles_to_match.apply(lambda x: _best_title_match(x, scimago_titles, fuzzy_threshold))
+        merged.loc[unmatched_mask, "Fuzzy_Title"] = matched_titles
+        
+        fuzzy_merged = pd.merge(
+            merged[unmatched_mask],
+            scimago_title,
+            how="left",
+            left_on=["Fuzzy_Title", "Match_Year"],
+            right_on=["Source title", "Year"],
+            suffixes=("", "_scimago_fz")
+        )
+        
+        # Renombrar columnas para evitar sufijos innecesarios en el scimago_title original
+        for col in scimago_title.columns:
+            if col in ["Match_ISSN", "Issn", "Year", "Source title"]:
+                continue
+            base_col = f"{col}_scimago" if col in combined_df.columns else col
+            fz_col = f"{col}_scimago_fz" if col in combined_df.columns else col
+            
+            if base_col in merged.columns and fz_col in fuzzy_merged.columns:
+                merged.loc[unmatched_mask, base_col] = fuzzy_merged[fz_col].values
 
     # --------------------------------------------------------
     # Consolidar columnas SCImago (_scimago → finales)
     # --------------------------------------------------------
-    SCIMAGO_MERGE_MAP = {
-        "SJR": "SJR_scimago",
-        "SJR Best Quartile": "SJR Best Quartile_scimago",
-        "H index": "H index_scimago",
-        "Country": "Country_scimago",
-        "Region": "Region_scimago",
-        "Publisher": "Publisher_scimago",
-        "Categories": "Categories_scimago",
-        "Areas": "Areas_scimago",
-    }
-
-    for final_col, sc_col in SCIMAGO_MERGE_MAP.items():
-        if sc_col in enriched.columns:
-            if final_col not in enriched.columns:
-                enriched[final_col] = None
-
-            enriched[final_col] = enriched[final_col].combine_first(
-                enriched[sc_col]
-            )
+    SCIMAGO_MERGE_MAP = [
+        "SJR", "SJR Best Quartile", "H index", "Country", "Region", 
+        "Publisher", "Categories", "Areas"
+    ]
+    
+    for final_col in SCIMAGO_MERGE_MAP:
+        sc_col = f"{final_col}_scimago"
+        
+        if final_col not in combined_df.columns:
+            # Si la columna no existía en el combined_df original, la agregamos desde sc_col
+            # si existió un conflicto, de lo contrario la columna ya está en merged con nombre final_col
+            if sc_col in merged.columns:
+                merged[final_col] = merged[sc_col]
+        else:
+            # Si existía, actualizamos valores nulos con los traídos de SCImago
+            if sc_col in merged.columns:
+                merged[final_col] = merged[final_col].combine_first(merged[sc_col])
 
     # --------------------------------------------------------
-    # Eliminar columnas técnicas de merge (_scimago)
+    # Eliminar columnas técnicas intermedios
     # --------------------------------------------------------
-    cols_to_drop = [c for c in enriched.columns if c.endswith("_scimago")]
-    if cols_to_drop:
-        enriched.drop(columns=cols_to_drop, inplace=True)
-
+    cols_to_drop = [c for c in merged.columns if c.endswith("_scimago") or c.endswith("_scimago_fz")]
+    cols_to_drop.extend(["Match_Year", "Match_ISSN", "Fuzzy_Title", "Issn", "Year_scimago"])
+    
+    # Remove 'Year' column brought from scimago merge if it overrode something, but _scimago took care of that
+    # merged still has 'Year' which was the original combined_df Year.
+    enriched = merged.drop(columns=[c for c in cols_to_drop if c in merged.columns])
+    
     return enriched

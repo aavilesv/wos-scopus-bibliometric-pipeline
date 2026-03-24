@@ -1,0 +1,37 @@
+2026-02-16 10:06:02,618 - bibliometric_pipeline - INFO - ============================================================
+2026-02-16 10:06:02,624 - bibliometric_pipeline - INFO - Bibliometric Review Pipeline
+2026-02-16 10:06:02,626 - bibliometric_pipeline - INFO - Execution started...
+2026-02-16 10:06:02,626 - bibliometric_pipeline - INFO - ============================================================
+2026-02-16 10:06:02,644 - bibliometric_pipeline - INFO - Input detected: Scopus Files=1, WoS Files=2
+2026-02-16 10:06:02,645 - bibliometric_pipeline - INFO - Loading SCImago data...
+2026-02-16 10:06:06,527 - bibliometric_pipeline - INFO - SCImago loaded: 326256 rows
+2026-02-16 10:06:06,528 - bibliometric_pipeline - INFO - Processing Scopus files...
+2026-02-16 10:06:32,567 - bibliometric_pipeline - INFO - Scopus merged: 1952 unique records (from 1991 raw)
+2026-02-16 10:06:32,568 - bibliometric_pipeline - INFO - Processing WoS files...
+2026-02-16 10:06:56,887 - bibliometric_pipeline - INFO - WoS merged: 1695 unique records (from 1752 raw)
+2026-02-16 10:06:56,889 - bibliometric_pipeline - INFO - Starting Cross-Deduplication (Threshold: 75)...
+2026-02-16 10:07:49,691 - bibliometric_pipeline - INFO - Duplicates identified: 1657
+2026-02-16 10:07:49,724 - bibliometric_pipeline - INFO - Normalizing WoS schema to Scopus...
+2026-02-16 10:07:49,763 - bibliometric_pipeline - INFO - Combined dataset: 1990 rows
+2026-02-16 10:07:50,462 - bibliometric_pipeline - INFO - Applying post-merge normalization (Years: 2023-2025)...
+2026-02-16 10:07:52,721 - bibliometric_pipeline - INFO - Enriching with SCImago metrics...
+2026-02-16 10:11:41,457 - bibliometric_pipeline - INFO - Final cleanup (exact Title+Year): Removed 335 duplicates.
+2026-02-16 10:11:41,458 - bibliometric_pipeline - INFO - Saving results to: G:\Mi unidad\bibliometric_review\RESULTS
+2026-02-16 10:11:42,339 - bibliometric_pipeline - INFO - Generating reports...
+2026-02-16 10:11:43,157 - bibliometric_pipeline - CRITICAL - Critical Error: [Errno 13] Permission denied: 'G:\\Mi unidad\\bibliometric_review\\RESULTS\\report.xlsx'
+Traceback (most recent call last):
+  File "g:\Mi unidad\bibliometric_review\main.py", line 274, in <module>
+    main()
+  File "g:\Mi unidad\bibliometric_review\main.py", line 227, in main
+    save_report_excel(report_tables, paths.results_dir)
+  File "g:\Mi unidad\bibliometric_review\reporting.py", line 525, in save_report_excel
+    _save_report_excel(report_tables, out)
+  File "g:\Mi unidad\bibliometric_review\reporting.py", line 94, in _save_report_excel
+    with pd.ExcelWriter(path, engine="openpyxl") as writer:
+  File "C:\Users\User\AppData\Local\Programs\Python\Python310\lib\site-packages\pandas\io\excel\_openpyxl.py", line 61, in __init__
+    super().__init__(
+  File "C:\Users\User\AppData\Local\Programs\Python\Python310\lib\site-packages\pandas\io\excel\_base.py", line 1246, in __init__
+    self._handles = get_handle(
+  File "C:\Users\User\AppData\Local\Programs\Python\Python310\lib\site-packages\pandas\io\common.py", line 882, in get_handle
+    handle = open(handle, ioargs.mode)
+PermissionError: [Errno 13] Permission denied: 'G:\\Mi unidad\\bibliometric_review\\RESULTS\\report.xlsx'

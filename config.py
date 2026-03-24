@@ -23,12 +23,12 @@ RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 # Parámetros de Análisis (Analysis Parameters)
 # Rango de años a filtrar (inclusive)
-YEAR_START = 2015
+YEAR_START = 2000
 YEAR_FINAL = 2025
-remove_blank_dois = True ## validar los doi si quieres que elimine o no
+remove_blank_dois = False ## validar los doi si quieres que elimine o no
 # Umbral de similitud para deduplicación (85%)
 # Significa que títulos con >= 85% de similitud serán considerados duplicados
-FUZZY_THRESHOLD = 75
+FUZZY_THRESHOLD = 90
 
 # Umbral de similitud para encontrar revistas en SCImago (90% es más estricto)
 SCIMAGO_FUZZY_THRESHOLD = 90

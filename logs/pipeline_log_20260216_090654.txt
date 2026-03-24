@@ -1,0 +1,29 @@
+2026-02-16 09:06:54,195 - bibliometric_pipeline - INFO - ============================================================
+2026-02-16 09:06:54,208 - bibliometric_pipeline - INFO - Bibliometric Review Pipeline
+2026-02-16 09:06:54,211 - bibliometric_pipeline - INFO - Execution started...
+2026-02-16 09:06:54,212 - bibliometric_pipeline - INFO - ============================================================
+2026-02-16 09:06:54,239 - bibliometric_pipeline - INFO - Input detected: Scopus Files=1, WoS Files=2
+2026-02-16 09:06:54,240 - bibliometric_pipeline - INFO - Loading SCImago data...
+2026-02-16 09:06:56,504 - bibliometric_pipeline - INFO - SCImago loaded: 326256 rows
+2026-02-16 09:06:56,505 - bibliometric_pipeline - INFO - Processing Scopus files...
+2026-02-16 09:07:13,909 - bibliometric_pipeline - INFO - Scopus merged: 1952 unique records (from 1991 raw)
+2026-02-16 09:07:13,911 - bibliometric_pipeline - INFO - Processing WoS files...
+2026-02-16 09:07:37,159 - bibliometric_pipeline - INFO - WoS merged: 1695 unique records (from 1752 raw)
+2026-02-16 09:07:37,161 - bibliometric_pipeline - INFO - Starting Cross-Deduplication (Threshold: 85)...
+2026-02-16 09:08:36,045 - bibliometric_pipeline - INFO - Duplicates identified: 1657
+2026-02-16 09:08:36,066 - bibliometric_pipeline - INFO - Normalizing WoS schema to Scopus...
+2026-02-16 09:08:36,081 - bibliometric_pipeline - INFO - Combined dataset: 1990 rows
+2026-02-16 09:08:36,407 - bibliometric_pipeline - INFO - Applying post-merge normalization (Years: 2023-2025)...
+2026-02-16 09:08:37,310 - bibliometric_pipeline - INFO - Enriching with SCImago metrics...
+2026-02-16 09:11:45,158 - bibliometric_pipeline - INFO - Final cleanup (exact Title+Year): Removed 335 duplicates.
+2026-02-16 09:11:45,159 - bibliometric_pipeline - INFO - Saving results to: G:\Mi unidad\bibliometric_review\RESULTS
+2026-02-16 09:11:46,381 - bibliometric_pipeline - INFO - Generating reports...
+2026-02-16 09:11:46,391 - bibliometric_pipeline - CRITICAL - Critical Error: unsupported operand type(s) for /: 'method' and 'int'
+Traceback (most recent call last):
+  File "g:\Mi unidad\bibliometric_review\main.py", line 274, in <module>
+    main()
+  File "g:\Mi unidad\bibliometric_review\main.py", line 215, in main
+    report_tables = build_report_tables(
+  File "g:\Mi unidad\bibliometric_review\reporting.py", line 254, in build_report_tables
+    abstract_pct = round(valid_abstracts / total_final * 100, 1) if total_final else 0
+TypeError: unsupported operand type(s) for /: 'method' and 'int'
