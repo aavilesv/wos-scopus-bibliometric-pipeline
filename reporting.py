@@ -143,14 +143,16 @@ def save_outputs(
 ) -> Tuple[Path, Path]:
     """
     Guarda:
-      - datawos_scopus.csv (con columna bothkeywords)
-      - datawos_scopus_repeatedstitles.csv
-    Retorna rutas guardadas.
+      - datawos_scopus.csv y .xlsx (con columna bothkeywords)
+      - datawos_scopus_repeatedstitles.csv y .xlsx
+    Retorna rutas guardadas (solo de CSV).
     """
     results_dir.mkdir(parents=True, exist_ok=True)
 
     out_main = results_dir / "datawos_scopus.csv"
+    out_main_excel = results_dir / "datawos_scopus.xlsx"
     out_dups = results_dir / "datawos_scopus_repeatedstitles.csv"
+    out_dups_excel = results_dir / "datawos_scopus_repeatedstitles.xlsx"
 
     if combined_df is None:
         combined_df = pd.DataFrame()
@@ -160,14 +162,26 @@ def save_outputs(
 
     dups_df = pd.DataFrame(sorted(list(duplicated_titles)), columns=["Título Repetido"])
 
+    # Guardar en CSV
     _save_csv_utf8sig(combined_df, out_main)
     _save_csv_utf8sig(dups_df, out_dups)
+    
+    # Guardar en Excel
+    try:
+        # openpyxl falla si hay zonas horarias. Convertimos si hay (aunque el dataset es de texto).
+        # Para prevenir fallos por compatibilidad desactivamos index.
+        combined_df.to_excel(out_main_excel, index=False, engine="openpyxl")
+        dups_df.to_excel(out_dups_excel, index=False, engine="openpyxl")
+    except Exception as e:
+        warn("Excel Export", f"Hubo un detalle guardando las tablas principales en Excel: {e}")
 
     info(
         "Archivos guardados",
-        "Se guardaron los outputs principales:\n\n"
+        "Se guardaron los outputs principales (formato CSV y Excel):\n\n"
         f"- {out_main}\n"
-        f"- {out_dups}"
+        f"- {out_main_excel}\n"
+        f"- {out_dups}\n"
+        f"- {out_dups_excel}"
     )
 
     return out_main, out_dups
@@ -231,7 +245,8 @@ def build_report_tables(
     year_end: int,
     scopus_stats: Optional[Dict] = None,
     wos_stats: Optional[Dict] = None,
-    removed_post_merge: int = 0
+    removed_post_merge: int = 0,
+    doi_val_counts: Optional[Dict] = None
 ) -> Dict[str, pd.DataFrame]:
     """
     Devuelve un dict {sheet_name: df} para exportar a Excel.
@@ -374,6 +389,20 @@ def build_report_tables(
         ],
         columns=["Metric", "Value"]
     )
+
+    if doi_val_counts:
+        doi_val_rows = [
+            ("", ""),
+            ("CROSSREF DOI VALIDATION", ""),
+            ("DOIs Checked Online", sum(doi_val_counts.values())),
+        ]
+        for status, count in doi_val_counts.items():
+            doi_val_rows.append((f"Status: {status}", count))
+            
+        stats_summary = pd.concat([
+            stats_summary, 
+            pd.DataFrame(doi_val_rows, columns=["Metric", "Value"])
+        ], ignore_index=True)
 
     # --- Distribución kept/removed por fuente (para gráfico y tabla) ---
     dedup_distribution = pd.DataFrame(

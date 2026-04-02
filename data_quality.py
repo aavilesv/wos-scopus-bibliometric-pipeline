@@ -71,17 +71,23 @@ def validate_quality(df: pd.DataFrame, source_name: str, remove_blank_dois: bool
     info(f"Validando calidad PRISMA ({source_name})", f"Analizando {stats['initial_count']} registros...")
     
     # ----------------------------------------------------
-    # 1. Limpieza y Filtrado de DOI
+    # 1. Limpieza y Filtrado de DOI (Sintáctico)
     # ----------------------------------------------------
     if "DOI" in df.columns:
-        df["DOI"] = df["DOI"].apply(clean_doi)
+        # Añadimos la columna doi_clean para que el usuario sepa qué se hizo
+        df["doi_clean"] = df["DOI"].apply(clean_doi)
+        
+        # Opcional: reemplazar el DOI original o dejarlo. Por retrocompatibilidad
+        # con otros scripts, actualizamos el DOI también.
+        df["DOI"] = df["doi_clean"]
+        
         if remove_blank_dois:
             before_doi = len(df)
-            df = df[df["DOI"] != ""].copy()
+            df = df[df["doi_clean"] != ""].copy()
             stats["removed_doi"] = before_doi - len(df)
             if stats["removed_doi"] > 0:
                 warn(f"Filtrado DOI ({source_name})", 
-                     f"Se eliminaron {stats['removed_doi']} registros sin DOI válido.")
+                     f"Se eliminaron {stats['removed_doi']} registros sin DOI válido sintácticamente.")
     
     # ----------------------------------------------------
     # 2. Filtrado de Títulos Vacíos

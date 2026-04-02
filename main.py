@@ -22,6 +22,7 @@ from deduplication import cross_deduplicate  # Lógica de deduplicación (parale
 from normalization import normalize_wos_to_scopus_schema, apply_post_merge_normalization  # Normalización de datos
 from scimago_utils import load_scimago_if_exists, build_scimago_map, apply_scimago_canonical_titles  # Utilidades SCImago
 from sjr_analysis import enrich_with_scimago  # Cruce final con métricas SCImago
+from doi_validation import validate_dois_online # Validación de DOIs Online
 from reporting import (  # Generación de reportes y gráficas
     save_outputs,
     build_report_tables,
@@ -181,6 +182,18 @@ def main() -> None:
     logger.info(f"Combined dataset: {len(combined_df)} rows")
 
     # --------------------------------------------------------
+    # 7.5) Validación Online de DOIs (Cruce con Crossref)
+    # --------------------------------------------------------
+    # Valida la autenticidad del campo DOI (si lo hay) y agrega las columnas:
+    # doi_verified, doi_validation_status, doi_metadata_found
+    doi_val_counts = {}
+    if not combined_df.empty:
+        logger.info("Applying Online DOI Validation using Crossref...")
+        # Llama a nuestro nuevo módulo que usa caché y consultas online
+        combined_df, doi_val_counts = validate_dois_online(combined_df, source_name="Combined")
+        logger.info(f"Online DOI validation completed. Results: {doi_val_counts}")
+
+    # --------------------------------------------------------
     # 8) Estandarización de Títulos de Revistas (Canonical Titles)
     # --------------------------------------------------------
     if not combined_df.empty and scimago_map:
@@ -258,7 +271,8 @@ def main() -> None:
         year_end=config.YEAR_FINAL,
         scopus_stats=scopus_stats,
         wos_stats=wos_stats,
-        removed_post_merge=removed_post_merge + removed_out_of_years
+        removed_post_merge=removed_post_merge + removed_out_of_years,
+        doi_val_counts=doi_val_counts
     )
     save_report_excel(report_tables, paths.results_dir)
 

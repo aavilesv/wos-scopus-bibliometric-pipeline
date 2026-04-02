@@ -1,0 +1,980 @@
+{
+  "10.1109/ictke67052.2025.11274445": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "AI-Driven Cell Monitoring and Automated Irrigation for Sugarcane Yield and Quality Prediction",
+    "year": 2025
+  },
+  "10.54386/jam.v26i1.2411": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Multistage sugarcane yield prediction using machine learning algorithms",
+    "year": 2024
+  },
+  "10.1007/978-981-15-9809-8_55": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Selection of the Best Crop for Farming Using Machine Learning",
+    "year": 2021
+  },
+  "10.1016/j.compag.2025.110522": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Performance evaluation of Sentinel-2 imagery, agronomic and climatic data for sugarcane yield estimation",
+    "year": 2025
+  },
+  "10.3390/bioengineering10020125": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Automated Estimation of Crop Yield Using Artificial Intelligence and Remote Sensing Technologies",
+    "year": 2023
+  },
+  "10.1016/j.fuel.2022.125409": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Modeling of sugarcane bagasse conversion to levulinic acid using response surface methodology (RSM), artificial neural networks (ANN), and fuzzy inference system (FIS): A comparative evaluation",
+    "year": 2022
+  },
+  "10.1007/978-981-19-7997-2_4": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Agricultural Technologies",
+    "year": 2023
+  },
+  "10.1007/s12355-023-01247-2": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Population Dynamics and Estimation of Damage of the Spittlebug Aeneolamia varia on Sugarcane in Colombia by Using remote Sensing and Machine Learning Tools",
+    "year": 2023
+  },
+  "10.3390/agronomy13030704": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Weather-Based Statistical and Neural Network Tools for Forecasting Rice Yields in Major Growing Districts of Karnataka",
+    "year": 2023
+  },
+  "10.14716/ijtech.v16i5.7233": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Design of a Sugarcane Yield and Productivity Prediction Model",
+    "year": 2025
+  },
+  "10.1016/j.fcr.2021.108360": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Data-driven, early-season forecasts of block sugarcane yield for precision agriculture",
+    "year": 2022
+  },
+  "10.1016/j.rsase.2025.101689": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Estimate of sugarcane productivity using machine learning algorithm from time series of WFI/CBERS-4 and WPM/CBERS-4A time series",
+    "year": 2025
+  },
+  "10.3390/rs12081313": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Integrating Landsat-8 and Sentinel-2 Time Series Data for Yield Prediction of Sugarcane Crops at the Block Level",
+    "year": 2020
+  },
+  "10.1007/s12524-021-01448-w": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Field-Scale Estimation and Comparison of the Sugarcane Yield from Remote Sensing Data: A Machine Learning Approach",
+    "year": 2022
+  },
+  "10.3390/atmos12111459": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Sugarcane Yield Forecast in Ivory Coast (West Africa) Based on Weather and Vegetation Index Data",
+    "year": 2021
+  },
+  "10.3390/rs11070861": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Early Season Mapping of Sugarcane by Applying Machine Learning Algorithms to Sentinel-1A/2 Time Series Data: A Case Study in Zhanjiang City, China",
+    "year": 2019
+  },
+  "10.3390/rs13020232": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Sugarcane Yield Mapping Using High-Resolution Imagery Data and Machine Learning Technique",
+    "year": 2021
+  },
+  "10.1016/j.compag.2021.106063": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Empirical model for forecasting sugarcane yield on a local scale in Brazil using Landsat imagery and random forest algorithm",
+    "year": 2021
+  },
+  "10.6041/j.issn.1000-1298.2019.s0.036": {
+    "status": "invalid",
+    "metadata_found": false,
+    "title": null,
+    "year": null
+  },
+  "10.1007/978-981-16-8403-6_23": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Crop Yield Prediction Using Weather Data and NDVI Time Series Data",
+    "year": 2022
+  },
+  "10.1016/j.fcr.2020.107984": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Integrating satellite imagery and environmental data to predict field-level cane and sugar yields in Australia using machine learning",
+    "year": 2021
+  },
+  "10.5194/isprs-archives-xlviii-4-w9-2024-357-2024": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "ESTIMATION OF SUGARCANE YIELD USING MULTI-TEMPORAL SENTINEL 2 SATELLITE IMAGERY AND RANDOM FOREST REGRESSION",
+    "year": 2024
+  },
+  "10.18280/ria.340607": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Ensemble Machine Learning Methods to Estimate the Sugarcane Yield Based on Remote Sensing Information",
+    "year": 2020
+  },
+  "10.1007/978-3-031-16217-6_14": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Sugarcane and Cassava Classification Using Machine Learning Approach Based on Multi-temporal Remote Sensing Data Analysis",
+    "year": 2023
+  },
+  "10.1007/s12355-024-01409-w": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "AI-Enhanced Remote Sensing Applications in Indian Sugarcane Research: A Comprehensive Review",
+    "year": 2024
+  },
+  "10.1007/s11042-023-16807-7": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Crop yield prediction in India based on mayfly optimization empowered attention-bi-directional long short-term memory (LSTM)",
+    "year": 2023
+  },
+  "10.1109/icirca54612.2022.9985016": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Review on Crop Yield Prediction with Deep Learning and Machine Learning Algorithms",
+    "year": 2022
+  },
+  "10.1016/j.eja.2024.127381": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Climate, altitude, yield, and varieties drive lodging in sugarcane: A random forest approach to predict risk levels on a tropical island",
+    "year": 2024
+  },
+  "10.1007/s12355-025-01711-1": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Energising Economies: The Global Impact of Indian Sugar",
+    "year": 2026
+  },
+  "10.3390/rs17162773": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Investigating the Earliest Identifiable Timing of Sugarcane at Early Season Based on Optical and SAR Time-Series Data",
+    "year": 2025
+  },
+  "10.1016/j.jafr.2024.101519": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Prospects of artificial intelligence for the sustainability of sugarcane production in the modern era of climate change: An overview of related global findings",
+    "year": 2024
+  },
+  "10.1002/er.5605": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Fuzzy modeling and particle swarm optimization for determining the optimal operating parameters to enhance the bio‐methanol production from sugar cane bagasse",
+    "year": 2020
+  },
+  "10.1016/j.jag.2022.102725": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Operational framework to predict field level crop biomass using remote sensing and data driven models",
+    "year": 2022
+  },
+  "10.3390/agronomy12091992": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Predicting Sugarcane Biometric Parameters by UAV Multispectral Images and Machine Learning",
+    "year": 2022
+  },
+  "10.1016/j.susmat.2025.e01823": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Employing diverse machine learning approaches to estimate the achievable bio-oil yield from sustainable biomass sources",
+    "year": 2026
+  },
+  "10.1109/access.2024.3502547": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Forecasting the Sugarcane Yields Based on Meteorological Data Through Ensemble Learning",
+    "year": 2024
+  },
+  "10.1016/j.compag.2018.09.003": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Neglecting spatial autocorrelation causes underestimation of the error of sugarcane yield models",
+    "year": 2019
+  },
+  "10.3390/agriculture11070682": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "High Accuracy Pre-Harvest Sugarcane Yield Forecasting Model Utilizing Drone Image Analysis, Data Mining, and Reverse Design Method",
+    "year": 2021
+  },
+  "10.1016/j.indcrop.2025.122396": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "High throughput phenotyping of energy cane using uncrewed aircraft system (UAS) and machine learning",
+    "year": 2026
+  },
+  "10.1038/s41598-025-03334-8": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Adaptive neuro fuzzy inference system based multicrop yield prediction in the semi arid region of India",
+    "year": 2025
+  },
+  "10.1109/icot54518.2021.9680618": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Spiking Neural Network (SNN) for Crop Yield Prediction",
+    "year": 2021
+  },
+  "10.1016/j.apenergy.2022.119775": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Forecast of glucose production from biomass wet torrefaction using statistical approach along with multivariate adaptive regression splines, neural network and decision tree",
+    "year": 2022
+  },
+  "10.1080/20964471.2026.2631900": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Soybean yield estimation in the Brazilian Midwest using Sentinel-2 imagery",
+    "year": 2026
+  },
+  "10.1007/s12524-022-01549-0": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Machine-Learning-Based Regional Yield Forecasting for Sugarcane Crop in Uttar Pradesh, India",
+    "year": 2022
+  },
+  "10.1007/s11104-024-06587-w": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Digital soil mapping and crop modeling to define the spatially-explicit influence of soils on water-limited sugarcane yield",
+    "year": 2024
+  },
+  "10.3389/fpls.2023.1114852": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "UAV imagery data and machine learning: A driving merger for predictive analysis of qualitative yield in sugarcane",
+    "year": 2023
+  },
+  "10.1016/j.energy.2018.11.056": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Integrated advanced nonlinear neural network-simulink control system for production of bio-methanol from sugar cane bagasse via pyrolysis",
+    "year": 2019
+  },
+  "10.1007/978-3-031-43605-5_15": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Machine Learning Methods for Crop Yield Prediction",
+    "year": 2023
+  },
+  "10.1016/bs.mim.2024.12.002": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Revolutionizing bioethanol production: The role of AI in process innovation",
+    "year": 2025
+  },
+  "10.1016/j.compag.2016.08.015": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "The effect of tuning, feature engineering, and feature selection in data mining applied to rainfed sugarcane yield modelling",
+    "year": 2016
+  },
+  "10.3390/agronomy11040646": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Recognition of Bloom/Yield in Crop Images Using Deep Learning Models for Smart Agriculture: A Review",
+    "year": 2021
+  },
+  "10.21138/gf.906": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Classification of sugarcane varieties with harmonized Sentinel-2 and Landsat-8/9 data using parametric and non-parametric methods",
+    "year": 2025
+  },
+  "10.22115/scce.2024.383387.1601": {
+    "status": "invalid",
+    "metadata_found": false,
+    "title": null,
+    "year": null
+  },
+  "10.1016/j.biombioe.2020.105808": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Optimization of process variables during torrefaction of coal/biomass/waste tyre blends: Application of artificial neural network &amp; response surface methodology",
+    "year": 2020
+  },
+  "10.1109/igarss39084.2020.9324395": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Yield and Commercial Cane Sugar Estimation for Sugarcane in Thailand - a Case Study",
+    "year": 2020
+  },
+  "10.1109/icitaet47105.2019.9170227": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Design Efficient Model To Increase Crop Yield Using Deep Learning",
+    "year": 2019
+  },
+  "10.3390/rs17111846": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Meta-Features Extracted from Use of kNN Regressor to Improve Sugarcane Crop Yield Prediction",
+    "year": 2025
+  },
+  "10.1016/j.jsames.2022.103881": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Digital soil mapping outputs on soil classification and sugarcane production in Brazil",
+    "year": 2022
+  },
+  "10.1016/b978-0-444-64235-6.50256-4": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Use of Artificial Intelligence to Experimental Conditions Identification in the Process of Delignification of Sugarcane Bagasse from Supercritical Carbon Dioxide",
+    "year": 2018
+  },
+  "10.3390/agronomy15092149": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Sugarcane (Saccharum officinarum) Productivity Estimation Using Multispectral Sensors in RPAs, Biometric Variables, and Vegetation Indices",
+    "year": 2025
+  },
+  "10.1016/j.rsase.2023.100962": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Machine learning model ensemble for predicting sugarcane yield through synergy of optical and SAR remote sensing",
+    "year": 2023
+  },
+  "10.1016/j.compag.2026.111580": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Artificial intelligence in sugarcane breeding: A comprehensive review of applications, tools, and future prospects",
+    "year": 2026
+  },
+  "10.1007/978-981-99-9521-9_1": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Deep Learning Models for Classification of Remotely Sensed Data of Sugarcane",
+    "year": 2024
+  },
+  "10.1109/icacc.2010.5486844": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Notice of Retraction: Comparative study of sugarcane average unit yield prediction with genetic BP neural network algorithm",
+    "year": 2010
+  },
+  "10.1016/j.eja.2025.127519": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Assessing the impact of climate variability on Australia’s sugarcane yield in 1980–2022",
+    "year": 2025
+  },
+  "10.3390/agriculture15070774": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Correction: Wang, M.; Li, T. Pest and Disease Prediction and Management for Sugarcane Using a Hybrid Autoregressive Integrated Moving Average—A Long Short-Term Memory Model. Agriculture 2025, 15, 500",
+    "year": 2025
+  },
+  "10.1016/j.compag.2016.05.016": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Hybrid learning of fuzzy cognitive maps for sugarcane yield classification",
+    "year": 2016
+  },
+  "10.35940/ijrte.b1510.078219": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Artificial Intelligence and Agriculture 5. 0",
+    "year": 2019
+  },
+  "10.11591/ijeecs.v37.i1.pp475-487": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Field-level sugarcane yield estimation utilizing Sentinel-2 time-series and machine learning",
+    "year": 2025
+  },
+  "10.1007/978-3-031-56703-2_4": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Deep Learning Methods for Precise Sugarcane Disease Detection and Sustainable Crop Management",
+    "year": 2024
+  },
+  "10.1016/j.eja.2023.126889": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "High-precision sugarcane yield prediction by integrating 10-m Sentinel-1 VOD and Sentinel-2 GRVI indexes",
+    "year": 2023
+  },
+  "10.1051/bioconf/20249700157": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Machine Learning Techniques for Sugarcane Yield Prediction Using Weather Variables",
+    "year": 2024
+  },
+  "10.54808/cisci2025.01.152": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Modelos de Aprendizaje Automático para la Precisión Predictiva e Interpretación Causal del Rendimiento de Cańa de Azúcar",
+    "year": 2025
+  },
+  "10.1016/j.rineng.2025.106790": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "A data-driven machine learning framework for predicting total agricultural food grain yield",
+    "year": 2025
+  },
+  "10.1007/s11119-024-10124-1": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Sugarcane yield estimation in Thailand at multiple scales using the integration of UAV and Sentinel-2 imagery",
+    "year": 2024
+  },
+  "10.1007/s12355-025-01713-z": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Potential for the Use of Machine Learning in Sugarcane Production in Thailand: A Review",
+    "year": 2026
+  },
+  "10.1109/igarss53475.2024.10641016": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Sugarcane Area Mapping with Zero Labels Using Hybrid Unsupervised and Supervised Approach",
+    "year": 2024
+  },
+  "10.1002/9781119823469.ch2": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Comparative Evaluation of Neural Networks in Crop Yield Prediction of Paddy and Sugarcane Crop",
+    "year": 2022
+  },
+  "10.22067/jam.2021.69805.1034": {
+    "status": "invalid",
+    "metadata_found": false,
+    "title": null,
+    "year": null
+  },
+  "10.1109/lagirs48042.2020.9165683": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Sugarcane Productivity Estimation Through Processing Hyperspectral Signatures Using Artificial Neural Networks",
+    "year": 2020
+  },
+  "10.3390/rs12172823": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Estimation of Sugarcane Yield Using a Machine Learning Approach Based on UAV-LiDAR Data",
+    "year": 2020
+  },
+  "10.1007/s12155-020-10157-0": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Simplex-Centroid Design and Artificial Neural Network-Genetic Algorithm for the Optimization of Exoglucanase Production by Penicillium Roqueforti ATCC 10110 Through Solid-State Fermentation Using a Blend of Agroindustrial Wastes",
+    "year": 2020
+  },
+  "10.3390/agronomy15040793": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Predicting Sugarcane Yield Through Temporal Analysis of Satellite Imagery During the Growth Phase",
+    "year": 2025
+  },
+  "10.1186/s42397-024-00208-8": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Comparative analysis of machine learning and statistical models for cotton yield prediction in major growing districts of Karnataka, India",
+    "year": 2025
+  },
+  "10.35940/ijrte.b2612.078219": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Supervised Machine Learning Techniques for Predicting Sugarcane Yield",
+    "year": 2019
+  },
+  "10.1007/s12155-013-9375-7": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Comparative Assessment of the Artificial Neural Network and Response Surface Modelling Efficiencies for Biohydrogen Production on Sugar Cane Molasses",
+    "year": 2014
+  },
+  "10.13189/ujar.2022.100611": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Sugarcane Yield Prediction Using Vegetation Indices in Northern Karnataka, India",
+    "year": 2022
+  },
+  "10.1080/01431161.2017.1325531": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Sugarcane yield prediction in Brazil using NDVI time series and neural networks ensemble",
+    "year": 2017
+  },
+  "10.1016/j.rsase.2022.100712": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "A review of UAV platforms, sensors, and applications for monitoring of sugarcane crops",
+    "year": 2022
+  },
+  "10.3390/land13091481": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Evaluating Sugarcane Yield Estimation in Thailand Using Multi-Temporal Sentinel-2 and Landsat Data Together with Machine-Learning Algorithms",
+    "year": 2024
+  },
+  "10.1002/cbdv.202502606": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Modeling and Optimization of Activated Carbon Yield From Sugarcane Bagasse Using RSM and Machine Learning",
+    "year": 2026
+  },
+  "10.1016/j.compag.2025.110658": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Estimating sugarcane yield and its components using unoccupied aerial systems (UAS)-based high throughput phenotyping (HTP)",
+    "year": 2025
+  },
+  "10.3390/s23041779": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Early Identification of Crop Type for Smallholder Farming Systems Using Deep Learning on Time-Series Sentinel-2 Imagery",
+    "year": 2023
+  },
+  "10.3390/agriculture13112115": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Predicting Sugarcane Yield via the Use of an Improved Least Squares Support Vector Machine and Water Cycle Optimization Model",
+    "year": 2023
+  },
+  "10.1002/9781394186686.ch6": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Smart Dust Technology for Monitoring and Control Systems in Smart Agriculture and Crop Surveillance Systems",
+    "year": 2025
+  },
+  "10.1109/iccakm46823.2020.9051545": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Machine Learning Models to Estimate the Sugarcane Brix Values from Multitemporal Vegetation Indices",
+    "year": 2020
+  },
+  "10.3389/fpls.2023.1324491": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "DSCA-PSPNet: Dynamic spatial-channel attention pyramid scene parsing network for sugarcane field segmentation in satellite imagery",
+    "year": 2024
+  },
+  "10.1007/s12524-024-02066-y": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Integration of Remote Sensing and Meteorological Data for Rapid Sugarcane Yield Estimation Using Machine Learning",
+    "year": 2025
+  },
+  "10.1080/19942060.2018.1526119": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Sugarcane growth prediction based on meteorological parameters using extreme learning machine and artificial neural network",
+    "year": 2018
+  },
+  "10.1109/igarss39084.2020.9323418": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "A Satellite-Based Methodology for Harvest Date Detection and Yield Prediction in Sugarcane",
+    "year": 2020
+  },
+  "10.1007/978-3-032-12827-0_2": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Crop Yield Prediction of Indian States Based on Machine Learning and Feature Engineering",
+    "year": 2026
+  },
+  "10.1109/incos45849.2019.8951397": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Distinguishing SARIMA with Extensive Neural Network Model for Forecasting Sugarcane Productivity",
+    "year": 2019
+  },
+  "10.1109/lgrs.2021.3113828": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Open Set Semantic Segmentation for Multitemporal Crop Recognition",
+    "year": 2022
+  },
+  "10.54386/jam.v24i3.1688": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Village level identification of sugarcane in Sangali, Maharashtra using open source data",
+    "year": 2022
+  },
+  "10.1007/s42979-025-04653-3": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Sugarcane Crop Yield Prediction Using Supervised Machine Learning Techniques",
+    "year": 2026
+  },
+  "10.36961/si33681": {
+    "status": "invalid",
+    "metadata_found": false,
+    "title": null,
+    "year": null
+  },
+  "10.1007/978-3-540-73007-1_139": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Consequences of Data Uncertainty and Data Precision in Artificial Neural Network Sugar Cane Yield Prediction",
+    "year": 2007
+  },
+  "10.1109/migars57353.2023.10064521": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Classification of Horticultural Crops in High Resolution Multispectral Imagery Using Deep Learning Approaches",
+    "year": 2023
+  },
+  "10.1007/s12524-024-01927-w": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Investigating the Capability of DOVE Satellite Temporal Data for Mapping Harvest Dates of Sugarcane Crop Types Using Fuzzy Model",
+    "year": 2024
+  },
+  "10.1007/s11069-026-08039-3": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Spatio-temporal analysis of climate-driven drought dynamics in Pakistan using geo-spatial and machine learning approaches",
+    "year": 2026
+  },
+  "10.3390/agronomy14112512": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Forecast of Sugarcane Yield in Chongzuo, Guangxi—LSTM Model Based on Fusion of Trend Yield and Meteorological Yield",
+    "year": 2024
+  },
+  "10.3390/rs17122055": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Sensitive Multispectral Variable Screening Method and Yield Prediction Models for Sugarcane Based on Gray Relational Analysis and Correlation Analysis",
+    "year": 2025
+  },
+  "10.3390/en17205191": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Applications of Machine Learning Technologies for Feedstock Yield Estimation of Ethanol Production",
+    "year": 2024
+  },
+  "10.1109/isac364032.2025.11156695": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Novel Approaches used for Sugarcane Yield Prediction using Artificial Intelligence and Machine Learning",
+    "year": 2025
+  },
+  "10.1371/journal.pone.0312444": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Prediction method of sugarcane important phenotype data based on multi-model and multi-task",
+    "year": 2024
+  },
+  "10.3390/rs13204040": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Remote Sensing Applications in Sugarcane Cultivation: A Review",
+    "year": 2021
+  },
+  "10.1016/j.agwat.2020.106042": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Determination of the water requirement and crop coefficient values of sugarcane by field water balance method in semiarid region",
+    "year": 2020
+  },
+  "10.3390/rs12213513": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Forecasting Spatio-Temporal Dynamics on the Land Surface Using Earth Observation Data—A Review",
+    "year": 2020
+  },
+  "10.3390/computers13060137": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Machine Learning-Based Crop Yield Prediction in South India: Performance Analysis of Various Models",
+    "year": 2024
+  },
+  "10.1007/s00253-011-3158-x": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Optimization of process parameters for ethanol production from sugar cane molasses by Zymomonas mobilis using response surface methodology and genetic algorithm",
+    "year": 2011
+  },
+  "10.1007/s12524-021-01466-8": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Combined Use of Landsat 8 and Sentinel 2A Imagery for Improved Sugarcane Yield Estimation in Wonji-Shoa, Ethiopia",
+    "year": 2022
+  },
+  "10.1007/s00704-024-04858-1": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Climate variability impacts on crop yields and agriculture contributions to gross domestic products in the Nile basin (1961–2016): What did deep machine learning algorithms tell us?",
+    "year": 2024
+  },
+  "10.5373/jardcs/v12sp7/20202219": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Determination of Organic Matter and pH Value of the Soil Using Deep Learning Techniques",
+    "year": 2020
+  },
+  "10.1109/iceconf57129.2023.10084094": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Sugarcane Yield and Price Prediction Using Forecasting Models",
+    "year": 2023
+  },
+  "10.1016/j.compag.2024.109667": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Evaluating statistical and machine learning techniques for sugarcane yield forecasting in the tarai region of North India",
+    "year": 2025
+  },
+  "10.1007/s11042-022-13919-4": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "An accurate prediction of crop yield using hybrid deep capsule auto encoder with softmax regression",
+    "year": 2023
+  },
+  "10.1109/icitr69413.2025.11353842": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Integrated Deep Learning, Machine Learning and Environmental Analytics for Sugarcane Variety Classification, Maturity Assessment, and Sugar Production Prediction: A Case Study at Lanka Sugar Factory, Pelwatte",
+    "year": 2025
+  },
+  "10.1016/j.atech.2026.101908": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Temporal deep learning for satellite-based sugarcane monitoring and cycle age estimation",
+    "year": 2026
+  },
+  "10.1109/ingarss61818.2024.10984153": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Yield Forecasting Of Sugarcane Using Machine Learning And UAV-Derived Canopy Height",
+    "year": 2024
+  },
+  "10.1016/b978-0-444-63456-6.50160-5": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Product Quality Monitoring Using Extreme Learning Machines and Bat algorithms: A Case Study in Second-Generation Ethanol Production",
+    "year": 2014
+  },
+  "10.1016/j.jag.2025.105081": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Machine learning-based high resolution spatial economic modeling of biomass energy potential in Southeast Asia",
+    "year": 2026
+  },
+  "10.1007/978-981-15-7106-0_20": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Syngas Assessment from Plastic Waste Using Artificial Neural Network—A Review",
+    "year": 2021
+  },
+  "10.1016/j.atech.2022.100046": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Sugarcane yield estimation through remote sensing time series and phenology metrics",
+    "year": 2022
+  },
+  "10.1007/s12355-024-01468-z": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Regional Model to Predict Sugarcane Yield Using Sentinel-2 Imagery in São Paulo State, Brazil",
+    "year": 2025
+  },
+  "10.13189/ujar.2023.110108": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Sugarcane Disease Detection Using CNN-Deep Learning Method: An Indian Perspective",
+    "year": 2023
+  },
+  "10.1016/j.atech.2025.101583": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Multi-dimensional optical remote sensing in agriculture: Spectral, angular, and spatial scaling for crop stress monitoring",
+    "year": 2025
+  },
+  "10.1016/j.jenvman.2025.125026": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Implementation of RSM and ANN optimization approach for the valorization of agro-wastes to renewable plastic precursor FDCA over non-precious bimetal oxide functionalized heterogeneous catalyst",
+    "year": 2025
+  },
+  "10.24425/ijet.2024.149566": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "CNN ensemble approach for early detection of sugarcane diseases – a comparison",
+    "year": 2024
+  },
+  "10.1117/12.3005124": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Planting areas extraction of sugarcane using multi-feature fusion method based on Sentinel-2A satellite images",
+    "year": 2024
+  },
+  "10.1109/access.2025.3645705": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Implementation of Long-Term Forecasting Models in Sugarcane for Agricultural Planning and Yield Goals Setting",
+    "year": 2025
+  },
+  "10.3844/jcssp.2010.439.445": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Artificial Neural Network Based Model for Forecasting Sugar Cane Production",
+    "year": 2010
+  },
+  "10.3390/agronomy13041169": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Hybrid CNN-SVM Classifier Approaches to Process Semi-Structured Data in Sugarcane Yield Forecasting Production",
+    "year": 2023
+  },
+  "10.1016/j.inpa.2026.01.009": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "A review of UAV remote sensing technology applications in common gramineous crops",
+    "year": 2026
+  },
+  "10.1002/ldr.5608": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Research on the Fusion of Time Series Sentinel‐1 Data and Phenological Features for Sugarcane Planting Distribution Extraction",
+    "year": 2025
+  },
+  "10.1109/icaca.2016.7887987": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Prediction of sugarcane diseases using data mining techniques",
+    "year": 2016
+  },
+  "10.1051/e3sconf/202130901162": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Convolutional and Spiking Neural Network Models for Crop Yield Forecasting",
+    "year": 2021
+  },
+  "10.1109/icccnt54827.2022.9984496": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Machine Learning Based Solution for Improving the Efficiency of Sugar Production in Sri Lanka",
+    "year": 2022
+  },
+  "10.1080/01431161.2025.2607761": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Sugarcane varietal classification using remote sensing and AI: a comprehensive review and future roadmap",
+    "year": 2026
+  },
+  "10.5194/isprs-archives-xlii-3-w6-229-2019": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "DISCRIMINATION OF SUGARCANE CROP AND CANE YIELD ESTIMATION USING LANDSAT AND IRS RESOURCESAT SATELLITE DATA",
+    "year": 2019
+  },
+  "10.1007/978-3-031-08743-1_9": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Linkage Models: Economic Key Drivers and Agricultural Production",
+    "year": 2022
+  },
+  "10.6041/j.issn.1000-1298.2022.10.030": {
+    "status": "invalid",
+    "metadata_found": false,
+    "title": null,
+    "year": null
+  },
+  "10.12133/j.smartag.sa202304004": {
+    "status": "invalid",
+    "metadata_found": false,
+    "title": null,
+    "year": null
+  },
+  "10.1007/s12633-025-03517-y": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Sustainable Extraction and ML-Based Yield Prediction of Silica Nanoparticles from Sugarcane Bagasse and Groundnut Shell for Functional Surface Coatings",
+    "year": 2025
+  },
+  "10.1109/iciset62123.2024.10940016": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Early Prediction of Crop Yield in Bangladesh Using Ensemble Learning",
+    "year": 2024
+  },
+  "10.1051/e3sconf/202130901031": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Deep Neural Network Model for Proficient Crop Yield Prediction",
+    "year": 2021
+  },
+  "10.1016/j.inpa.2023.06.004": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Plot level sugarcane yield estimation by machine learning on multispectral images: A case study of Bundaberg, Australia",
+    "year": 2024
+  },
+  "10.1016/j.fuel.2018.05.051": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Artificial neural network model to predict behavior of biogas production curve from mixed lignocellulosic co-substrates",
+    "year": 2018
+  },
+  "10.1007/s12355-025-01703-1": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Leveraging Blended Machine Learning Model for Sugarcane Crop Yield Estimation: Predictive Insights in Precision Agriculture",
+    "year": 2026
+  },
+  "10.13031/aea.15220": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Predicting Banana Yield at the Field Scale by Combining Sentinel-2 Time Series Data and Regression Models",
+    "year": 2023
+  },
+  "10.3390/rs15174123": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Annual Field-Scale Maps of Tall and Short Crops at the Global Scale Using GEDI and Sentinel-2",
+    "year": 2023
+  },
+  "10.1007/978-981-97-6009-1_33": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "Crop Yield Predictions Based on Machine Learning",
+    "year": 2024
+  },
+  "10.1016/j.jag.2026.105183": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "From canopy segmentation to accurate prediction: An UAV-based multi-feature fusion framework for plot-scale ratoon sugarcane seedling counting",
+    "year": 2026
+  },
+  "10.1007/s12652-020-01922-2": {
+    "status": "valid",
+    "metadata_found": true,
+    "title": "RETRACTED ARTICLE: Integration of RNN with GARCH refined by whale optimization algorithm for yield forecasting: a hybrid machine learning approach",
+    "year": 2024
+  }
+}
