@@ -164,7 +164,7 @@ def enrich_with_scimago(
     # --------------------------------------------------------
     SCIMAGO_MERGE_MAP = [
         "SJR", "SJR Best Quartile", "H index", "Country", "Region", 
-        "Publisher", "Categories", "Areas"
+        "Publisher", "Categories", "Areas", "Coverage"
     ]
     
     for final_col in SCIMAGO_MERGE_MAP:
@@ -189,5 +189,20 @@ def enrich_with_scimago(
     # Remove 'Year' column brought from scimago merge if it overrode something, but _scimago took care of that
     # merged still has 'Year' which was the original combined_df Year.
     enriched = merged.drop(columns=[c for c in cols_to_drop if c in merged.columns])
+    
+    # --------------------------------------------------------
+    # Agregar prefijo "scimago__" a las columnas solicitadas
+    # --------------------------------------------------------
+    scimago_prefix_cols = [
+        "SJR Best Quartile", "H index", "Country", "Region", 
+        "SJR", "Coverage", "Categories", "Areas"
+    ]
+    
+    rename_map = {}
+    for col in scimago_prefix_cols:
+        if col in enriched.columns:
+            rename_map[col] = f"scimago_{col}"
+            
+    enriched = enriched.rename(columns=rename_map)
     
     return enriched
