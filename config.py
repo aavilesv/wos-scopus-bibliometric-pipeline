@@ -23,7 +23,7 @@ RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 # Parámetros de Análisis (Analysis Parameters)
 # Rango de años a filtrar (inclusive)
-YEAR_START = 2000
+YEAR_START = 2015
 YEAR_FINAL = 2025
 remove_blank_dois = False ## validar los doi si quieres que elimine o no
 # Umbral de similitud para deduplicación (85%)
